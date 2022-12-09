@@ -10,3 +10,5 @@
 | Create page for displaying predictions based on sentiment score                          | Mohammad Osama | P1       | 12                              | Results, slider, thumb up/down??                                           |
 | Set up basic Flask server to access our web app                                          | Mohammad Osama | P1       | 2                               |                                                                            |
 | Create the results page for displaying the word cloud                                    | Mohammad Osama | P2       | 10                              |                                                                            |
+| Implement Twitter search API call                                                        | Jay Liu        | P1       | 6                               | Some uncertainty here as Elon Musk is wrapping everything in his tentacles |
+| Implement frequent pattern mining function                                               | Jay Liu        | P1       | 10                              | Check whether Twitter has this built in                                    |
