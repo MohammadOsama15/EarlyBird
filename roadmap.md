@@ -7,4 +7,6 @@
 | Create a MVP of the front end                                                            | Mahreen Asghar | P1       | 6                               |                                                                            |
 | Implement the landing page (simple page with search box, radio button and submit button) | Mahreen Asghar | P1       | 5                               |                                                                            |
 | Create information page that gives broad overview on what sentiment analysis is          | Mahreen Asghar | P2       | 3                               |                                                                            |
-
+| Create page for displaying predictions based on sentiment score                          | Mohammad Osama | P1       | 12                              | Results, slider, thumb up/down??                                           |
+| Set up basic Flask server to access our web app                                          | Mohammad Osama | P1       | 2                               |                                                                            |
+| Create the results page for displaying the word cloud                                    | Mohammad Osama | P2       | 10                              |                                                                            |
