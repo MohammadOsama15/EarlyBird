@@ -12,3 +12,5 @@
 | Create the results page for displaying the word cloud                                    | Mohammad Osama | P2       | 10                              |                                                                            |
 | Implement Twitter search API call                                                        | Jay Liu        | P1       | 6                               | Some uncertainty here as Elon Musk is wrapping everything in his tentacles |
 | Implement frequent pattern mining function                                               | Jay Liu        | P1       | 10                              | Check whether Twitter has this built in                                    |
+| Implement cookies                                                                        | Jay Liu        | P2       | 6                               |                                                                            |
+| Search Autocomplete                                                                      | Jay Liu        | P3       | 6                               |                                                                            |
