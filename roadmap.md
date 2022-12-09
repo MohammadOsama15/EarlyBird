@@ -1,0 +1,5 @@
+| Task                                                                                     | Owner          | Priority | Level of Effort Estimate (Days) | Additional Notes                                                           |
+| ---------------------------------------------------------------------------------------- | -------------- | -------- | ------------------------------- | -------------------------------------------------------------------------- |
+| Research ML models for the Twitter sentiment.                                            | Andalib        | P1       | 10                              |                                                                            |
+| Train ML model using Sentiment 140 dataset                                               | Andalib        | P1       | 5                               |                                                                            |
+| Make sentiment Analysis data downloadable                                                | Andalib        | P2       | 10                              |                                                                            |
