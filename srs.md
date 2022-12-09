@@ -26,3 +26,23 @@ In addition:
 * “TF” refers to the TensorFlow deep learning framework.
 * “GloVe” is a library of pre-trained word vectors we will use to inform our neural network of tweet semantics.
 
+# 2. Overall Description
+
+## 2.1 User Needs
+EarlyBird attempts to solve the following problems:
+* Users interested in launching a product/service need to assess the sentiment of their potential customers/audience.
+* Organizations already providing a product/service may want to use Twitter as an avenue to understand audience sentiment.
+* Twitter provides a large quantity of sentiment data, but in an unstructured and disparate format.
+EarlyBird will solve the problems above by performing sentiment analysis on tweets by a Tweeter, or tweets by many Tweeters on a topic, and output the results in an accessible format.
+
+
+## 2.2 Assumptions and Dependencies
+Our app makes the following assumptions:
+* For analysis of an individual account, the Tweeter is human (not a bot).
+* For analysis of many Tweeters tweeting about a topic, there are sufficient tweets to perform statistical analysis.
+
+Other significant dependencies: 
+* We will use TF or PyTorch to create our neural network and train our machine learning model for predicting whether a tweet contains positive, negative or neutral sentiment.
+* We will train our model on the Sentiment140 dataset (1.6 million tweets annotated with sentiment values from 0 - 4; 0 = negative, 2 = neutral, 4 = positive).
+* We will use Python data science libraries to perform remaining analysis tasks and return raw data exports.
+* We will use the Twitter API to fetch tweets corresponding to the topic/user searched.
