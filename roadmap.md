@@ -3,3 +3,8 @@
 | Research ML models for the Twitter sentiment.                                            | Andalib        | P1       | 10                              |                                                                            |
 | Train ML model using Sentiment 140 dataset                                               | Andalib        | P1       | 5                               |                                                                            |
 | Make sentiment Analysis data downloadable                                                | Andalib        | P2       | 10                              |                                                                            |
+| Create a mockup of the website via Figma                                                 | Mahreen Asghar | P1       | 6                               |                                                                            |
+| Create a MVP of the front end                                                            | Mahreen Asghar | P1       | 6                               |                                                                            |
+| Implement the landing page (simple page with search box, radio button and submit button) | Mahreen Asghar | P1       | 5                               |                                                                            |
+| Create information page that gives broad overview on what sentiment analysis is          | Mahreen Asghar | P2       | 3                               |                                                                            |
+
