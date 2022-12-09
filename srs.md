@@ -105,3 +105,42 @@ Acceptance criteria:
 * Implement a slider filter results based on sentiment score.
 * When a user searches certain topics they will be suggested similar topics people have searched on Twitter.
 * A back button should be present to redirect the user back to the main page. 
+
+### 3.1.6 Functional requirement 6 - export analysis of individual accounts for offline use
+Description: As a User, I can download the sentiment analysis performed by EarlyBird on a Tweeter to use in my own data experiments.
+
+Acceptance criteria:
+* Data is accessible in CSV, JSON or other widely used formats.
+* All data and statistics used to generate data views included in the UI will be exported, including tweet content.
+* Users can set start and end dates for tweets considered in the export.
+* Users can choose between their preferred export formats.
+
+### 3.1.7 Functional requirement 7 - export analysis of topics for offline use
+Description: As a User, I can download the sentiment analysis performed by EarlyBird on a topic to use in my own data experiments.
+
+Acceptance criteria:
+* Data is accessible in CSV, JSON or other widely used formats.
+* All data and statistics used to generate data views included in the UI will be exported, including tweet content.
+* Users can set start and end dates for tweets considered in the export.
+* Users can choose between their preferred export formats.
+
+### 3.1.8 Functional requirement 8 - revisit page
+Description: As a User, I will be able to see my query history in both modes of the app.
+
+Acceptance criteria:
+* A cookie will be used as a token for stored query parameters associated with each user’s session.
+* On a subsequent visit, the cookie will be used as a token to fetch information from the database.
+* Query parameters submitted previously will be displayed as a list associated with the search input box (similar to Google suggestions).
+* Cookies will expire after a fixed amount of time; users will have the option to opt out and not have anything cached for his or her session
+
+## 3.2 External Interface Requirements
+See our design mockups in the `mockups` folder for visual specifications.
+
+## 3.3 System Requirements*
+Users of our application need a computer with access to the internet, and a modern web browser that can render JavaScript.
+
+## 3.4 Nonfunctional Requirements
+1. On a 10 Mbps connection, each server request should complete within 5 seconds. A server is busy and a message will be displayed if too many queries are submitted simultaneously.
+2. The UI should be simple to navigate and free of clutter. This means minimizing the number of input boxes, submit buttons, dropdown menus, and so on. Important page elements should be sufficiently visible to the user.
+3. The UI should follow a design theme such that all elements blend well together.
+4. Sentiment classifier should be sufficiently accurate (we set our initial goal to be 60% accurate when compared against training dataset)
