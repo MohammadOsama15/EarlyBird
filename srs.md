@@ -46,3 +46,62 @@ Other significant dependencies:
 * We will train our model on the Sentiment140 dataset (1.6 million tweets annotated with sentiment values from 0 - 4; 0 = negative, 2 = neutral, 4 = positive).
 * We will use Python data science libraries to perform remaining analysis tasks and return raw data exports.
 * We will use the Twitter API to fetch tweets corresponding to the topic/user searched.
+
+# 3. System Features and Requirements
+
+## 3.1 Functional requirements
+
+### 3.1.1 Functional requirement 1 - search page
+
+Description: As a User, I can choose between one of two modes - performing analysis on an individual Tweeter, or on many tweets relating to a topic.
+
+Acceptance criteria:
+* The landing page will have two buttons, one directing to each mode.
+* For the “individual account” mode, the subsequent page will have a form and a submit button to enter a Twitter handle.
+* For the “topic” mode, the subsequent page will have a form and a submit button to query the Twitter API for a topic/string.
+* There will be an “information” hover button explaining the difference between the two modes for new Users.
+
+
+### 3.1.2 Functional requirement 2 - information page
+
+Description: As a User, I can learn more information about what a Twitter sentiment analyzer is.
+
+Acceptance criteria:
+* Users can click on the information symbol on the top right of the main page which will take them to the information page.
+* Users will be able to see information regarding what a Twitter sentiment analyzer
+* Users will be able to see information about who has made this app and how to contact them.
+A back button should be present to redirect the user back to the main page. 
+
+
+### 3.1.3 Functional requirement 3 - Viewing a Tweeter’s most-tweeted-about topics
+
+Description: Using the “individual account” mode, Users can search for a Tweeter and view their most tweeted-about topics.
+
+Acceptance criteria:
+* When the User starts typing a username in the search box, a dropdown list of suggested Tweeter handles (starting with the string entered) should appear.
+* After hitting the submit button, a page displaying the topics most frequently tweeted about by the Tweeter will be displayed.
+* The topics will be displayed in a word cloud shaped like the Twitter logo.
+* Words in the word cloud will be larger the more the Tweeter tweets about them.
+
+
+### 3.1.4 Functional requirement 4 - analyzing sentiment on topics an Account tweets about
+
+Description: After navigating to the word cloud of topics, a User can click on any word shown to understand the Tweeter’s sentiment on that topic.
+
+Acceptance criteria:
+
+* The clicked-on topic will redirect the User to a page displaying lists of the Tweeter’s posts on that topic
+* The default view will be of two lists of tweets, positive and negative. The lists will be sorted from strongest to weakest sentiment; i.e. the negative list will have the most negative tweets at the top and weakly negative at the bottom, and similarly for the positive list.
+* A dropdown menu or other selector will be implemented to allow Users to sort the tweets by different parameters besides sentiment strength (e.g. date).
+* A back button should be present to redirect the User back to the main page. 
+
+### 3.1.5 Functional requirement 5 - viewing results regarding a certain topic
+Description: As a User, I can search for a topic and understand the sentiment of Tweeters across Twitter.
+
+Acceptance criteria:
+* After searching the topic, users will be redirected to a page displaying the sentiment of Twitter users regarding that topic. 
+* Users will be able to slide through a bar on the bottom that would allow them to filter people’s sentiments regarding that topic. 
+* UI elements will be updated dynamically according to the sentiment score the topic receives. 
+* Implement a slider filter results based on sentiment score.
+* When a user searches certain topics they will be suggested similar topics people have searched on Twitter.
+* A back button should be present to redirect the user back to the main page. 
