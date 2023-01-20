@@ -3,7 +3,7 @@
 ## Minimum Viable Product
 For reference:
 * A “User” is a user of our application, EarlyBird,
-* A Tweeter is a user of Twitter (referred to as a Twitter ID in Twitter Docs).
+* A "Tweeter" is a user of Twitter (referred to as a Twitter ID in Twitter Docs).
 
 Our MVP is an app that allows users to:
 1. Part I: search Twitter (via API) for a single Tweeter, view their most-tweeted about topic, and view a tweet about that topic with its sentiment score.
