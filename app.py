@@ -1,6 +1,4 @@
 import flask
-import dotenv
-
 
 app = flask.Flask(__name__)
 
