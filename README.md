@@ -17,7 +17,7 @@ ACCESS_TOKEN_SECRET = "STRING_HERE"
 
 4. A .gitnore file has been created as a part of this PR. As of Sprint 1, **pycache** and .**env** is ignored.
 
-Feel free to add additional keys, tokens, and environment variables.
+Feel free to add additional keys, tokens, environment variables, and the associated documentations.
 
 ## .env file explained
 We use the dotenv module to load the .env file. By default, the function looks for the presence of .env under the same directory as your app.py file.
