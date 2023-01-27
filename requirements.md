@@ -6,8 +6,7 @@ A .env file is used in conjunction with .gitignore to obscure sensitive informat
 2. Create a project and generate your API keys.
 3. Create a file named .env in the same directory as your app.py and fill in the blank:
 
->API_KEY = YOUR_TWITTER_API_KEY = "STRING_HERE". 
-
+>API_KEY = YOUR_TWITTER_API_KEY = "STRING_HERE" \
 API_SECRET_KEY = "STRING_HERE". 
 
 BEARER_TOKEN = "STRING_HERE". 
