@@ -1,43 +1,43 @@
 import flask
-from flask import send_file
+from flask import render_template
 
 
 app = flask.Flask(__name__)
 @app.route('/')
 def welcome():
-    return send_file('./templates/welcome.html')
+    return render_template("welcome.html")
 
 @app.route('/login')
 def login():
-    return send_file("./templates/login.html")
+    return render_template("login.html")
 
 @app.route('/signup')
 def signup():
-    return send_file("./templates/signup.html")
+    return render_template("signup.html")
 
 @app.route('/logout')
 def logout():
-    return send_file("./templates/logout.html")
+    return render_template("logout.html")
     
 @app.route('/search')
 def search():
-    return send_file("./templates/search.html")
+    return render_template("search.html")
 
 @app.route('/information')
 def information():
-    return send_file("./templates/info.html")
+    return render_template("information.html")
 
 @app.route('/userTopic')
 def userTopic():
-    return send_file("./templates/userTopic.html")
+    return render_template("userTopic.html")
 
 @app.route('/userSentiment')
 def userSentiment():
-    return send_file("./templates/userSentiment.html")
+    return render_template("userSentiment.html")
 
 @app.route('/topicSentiment')
 def topicSentiment():
-    return send_file("./templates/topicSentiment.html")
+    return render_template("topicSentiment.html")
 
 if __name__ =='__main__':
     app.run()
