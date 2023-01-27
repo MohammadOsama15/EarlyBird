@@ -3,6 +3,9 @@ A .env file is used in conjunction with .gitignore to obscure sensitive informat
 
 1. Create a Twitter Developer account at:
    https://developer.twitter.com/en/portal
+   
+**   note: a valid phone number is required for registration.**
+  
 2. Create a project and generate your API keys.
 3. Create a file named .env in the same directory as your app.py and fill in the blank:
 
