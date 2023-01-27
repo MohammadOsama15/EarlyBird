@@ -15,7 +15,7 @@ BEARER_TOKEN = "STRING_HERE" \
 ACCESS_TOKEN = "STRING_HERE" \
 ACCESS_TOKEN_SECRET = "STRING_HERE"
 
-4. A .gitignore file has been created as a part of this PR. As of Sprint 1, \_\_pycache\_\_ and .**env** is ignored.
+4. A .gitignore file has been created as a part of this PR. As of Sprint 1, \_\_pycache\_\_ and .env is ignored.
 
 Feel free to add additional keys, tokens, environment variables, and the associated documentations.
 
