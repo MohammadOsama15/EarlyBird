@@ -20,7 +20,7 @@ ACCESS_TOKEN_SECRET = "STRING_HERE"
 Feel free to add additional keys, tokens, and environment variables.
 
 ## .env file explained
-We use the dotenv module to load the .env file. By default, the function looks for the presence of .env under the same directory your app.py file is placed under.
+We use the dotenv module to load the .env file. By default, the function looks for the presence of .env under the same directory as your app.py file.
 
 Once the configuration file is loaded, we can access these variables by calling the os.getenv() function.
 
