@@ -10,7 +10,7 @@ A .env file is used in conjunction with .gitignore to obscure sensitive informat
 API_SECRET_KEY = "STRING_HERE" \
 BEARER_TOKEN = "STRING_HERE" \
 ACCESS_TOKEN = "STRING_HERE" \
-ACCESS_TOKEN_SECRET = "STRING_HERE" \
+ACCESS_TOKEN_SECRET = "STRING_HERE"
 
 4. A .gitnore file has been created as a part of this PR. For Sprint 1, **pycache** and .**env** is ignored.
 
