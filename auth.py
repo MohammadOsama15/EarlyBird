@@ -12,6 +12,7 @@ def login():
     return render_template('login.html')
 
 
+# grab user login details and submit via http POST
 @auth.route('/login', methods=['POST'])
 def login_post():
 
@@ -21,7 +22,7 @@ def login_post():
 
     user = User.query.filter_by(email=email).first()
 
-    # check whether email exists and hash matches
+    # check whether email exists and hash matches, short circuit user back to login page if credentials do not match
     if not user or not check_password_hash(user.password, password):
         flash("Please check your login details and try again.")
         return redirect(url_for("auth.login"))
@@ -63,6 +64,7 @@ def signup_post():
     return redirect(url_for('auth.login'))
 
 
+# log out user via flask_login function and return to index
 @auth.route('/logout')
 @login_required
 def logout():
