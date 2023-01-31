@@ -15,10 +15,11 @@ def index():
 @login_required
 def profile():
 
+    # pass firstname for greet message
     return render_template("profile.html", name=current_user.firstname)
 
 
-# log in required to use search feature?
+# log in required to use search feature???
 @main.route('/search')
 @login_required
 def search():
