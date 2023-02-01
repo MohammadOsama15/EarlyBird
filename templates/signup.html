@@ -1,58 +1,71 @@
-{% extends "base.html" %} {% block content %}
-<div class="column is-4 is-offset-4">
-  <h3 class="title">Sign Up</h3>
-  <div class="box">
-    <form method="POST" action="/signup">
-      <div class="field">
-        <div class="control">
-          <input
-            class="input is-large"
-            type="email"
-            name="email"
-            placeholder="Email"
-            autofocus=""
-          />
+{% extends "base.html" %} 
+{% block content %}
+{% with messages = get_flashed_messages() %} 
+{% if messages %}
+  <div class="alert bg-danger text-light col-lg-6 mb-5 mb-lg-0 offset-md-3" role="alert" >{{ messages[0] }}</div>
+{% endif %} 
+{% endwith %}
+<form method="POST" action="/signup">
+<section class="text-center text-lg-start">
+  <style>
+    .cascading-right {
+      margin-right: -20px;
+      margin-left: -20px;
+    }
+    @media (max-width: 50) {
+      .cascading-right {
+        margin-right: 0;
+      }
+    }
+  </style>
+  <!-- p = pad, py => pad y, px => pad x -->
+  <div class="container py-4">
+    <div class="row g-0 align-items-center">
+      <!-- set card to 6 col wide and centered -->
+      <div class="col-lg-6 mb-5 mb-lg-0 offset-md-3">
+        <div class="card cascading-right" style="
+            background: hsla(0, 0%, 100%, 0.35);
+            backdrop-filter: blur(30px);
+            ">
+          <div class="card-body p-5 shadow-6 text-center">
+            <h2 class="fw-bold mb-5">Sign Up</h2>
+            <form>
+              <!-- 2 column grid layout with text inputs for the first and last names -->
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <input type="text" class="form-control" name="firstname" />
+                    <label class="form-label" >First name</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <input type="text" class="form-control" name="lastname" />
+                    <label class="form-label" >Last name</label>
+                  </div>
+                </div>
+              </div>
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input type="email" class="form-control" name="email" />
+                <label class="form-label" >Email address</label>
+              </div>
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <input type="password" class="form-control" name="password" />
+                <label class="form-label">Password</label>
+              </div>
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-primary btn-block mb-4">
+                Sign Up
+              </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-
-      <div class="field">
-        <div class="control">
-          <input
-            class="input is-large"
-            type="text"
-            name="firstname"
-            placeholder="First Name"
-            autofocus=""
-          />
-        </div>
-      </div>
-
-      <div class="field">
-        <div class="control">
-          <input
-            class="input is-large"
-            type="text"
-            name="lastname"
-            placeholder="Last Name"
-            autofocus=""
-          />
-        </div>
-      </div>
-
-      <div class="field">
-        <div class="control">
-          <input
-            class="input is-large"
-            type="password"
-            name="password"
-            placeholder="Password"
-          />
-        </div>
-      </div>
-      <button class="button is-block is-info is-large is-fullwidth">
-        Sign Up
-      </button>
-    </form>
+    </div>
   </div>
-</div>
+</section>
+</form>
 {% endblock %}

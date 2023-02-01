@@ -1,3 +1,13 @@
 {% extends "base.html" %} {% block content %}
-<h1 class="title">Welcome, {{name}}!</h1>
+
+<div
+  class="alert bg-success text-light col-lg-6 mb-5 mb-lg-0 offset-md-3"
+  role="alert"
+>
+  Welcome, {{ name }}!
+</div>
+{% endblock %} {% block javascript %}
+<script>
+  $(".bg-success").empty().show().html(message).delay(3000).fadeOut(300);
+</script>
 {% endblock %}
