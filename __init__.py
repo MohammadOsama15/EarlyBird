@@ -11,7 +11,8 @@ from flask_login import LoginManager
 load_dotenv()
 
 
-SECRET_KEY = os.getenv(SECRET_KEY)
+# this is used to encrypt our cookie
+SECRET_KEY = os.getenv("EB_SECRET")
 
 db = SQLAlchemy()
 
