@@ -1,45 +1,60 @@
-{% extends "base.html" %} {% block content %} {% with messages =
-get_flashed_messages() %} {% if messages %}
-<div class="notification is-danger">{{ messages[0] }}</div>
-{% endif %} {% endwith %}
+{% extends "base.html" %} 
+{% block content %} 
+{% with messages = get_flashed_messages() %} 
+{% if messages %}
+  <div class="alert bg-danger text-light col-lg-6 mb-5 mb-lg-0 offset-md-3" role="alert" >{{ messages[0] }}</div>
+{% endif %} 
+{% endwith %}
 <form method="POST" action="/login">
-  <div class="column is-4 is-offset-4">
-    <h3 class="title">Login</h3>
-    <div class="box">
-      <form method="POST" action="/login">
-        <div class="field">
-          <div class="control">
-            <input
-              class="input is-large"
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              autofocus=""
-            />
+<section class="text-center text-lg-start">
+  <style>
+    .cascading-right {
+      margin-right: -20px;
+      margin-left: -20px;
+    }
+    @media (max-width: 50) {
+      .cascading-right {
+        margin-right: 0;
+      }
+    }
+  </style>
+  <!-- p = pad, py => pad y, px => pad x -->
+  <div class="container py-4">
+    <div class="row g-0 align-items-center">
+      <!-- set card to 6 col wide and centered -->
+      <div class="col-lg-6 mb-5 mb-lg-0 offset-md-3">
+        <div class="card cascading-right" style="background: hsla(0, 0%, 100%, 0.35); backdrop-filter: blur(30px);">
+          <div class="card-body p-5 shadow-6 text-center">
+            <h2 class="fw-bold mb-5">Login</h2>
+            <form>
+              <!-- Email address -->
+              <div class="form-outline mb-4">
+                <input type="email" class="form-control" name="email" />
+                <label class="form-label" >Email address</label>
+              </div>
+              <!-- Password -->
+              <div class="form-outline mb-4">
+                <input type="password" class="form-control" name="password" />
+                <label class="form-label">Password</label>
+              </div>
+              <!-- Checkbox -->
+              <div class="form-check d-flex justify-content-center mb-4">
+                <input class="form-check-input me-2" type="checkbox" value="" name="remember" checked />
+                <label class="form-check-label">
+                  Remember me
+                </label>
+              </div>
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-primary btn-block mb-4">
+                Login
+              </button>
+              </div>
+            </form>
           </div>
         </div>
-
-        <div class="field">
-          <div class="control">
-            <input
-              class="input is-large"
-              type="password"
-              name="password"
-              placeholder="Your Password"
-            />
-          </div>
-        </div>
-        <div class="field">
-          <label class="checkbox">
-            <input type="checkbox" name="remember" />
-            Remember me
-          </label>
-        </div>
-        <button class="button is-block is-info is-large is-fullwidth">
-          Login
-        </button>
-      </form>
+      </div>
     </div>
   </div>
-  {% endblock %}
+</section>
 </form>
+{% endblock %}

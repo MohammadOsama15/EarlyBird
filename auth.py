@@ -51,6 +51,7 @@ def signup_post():
 
     # if record exists, force signup again
     if user:
+        flash("This email address has already been taken. Please use a different one.")
         return redirect(url_for('auth.signup'))
 
     # if execution reaches this line (e.g. doesn't get short-circuited), create new user and hash password entry.
