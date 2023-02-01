@@ -1,10 +1,17 @@
 # this module instantiates the app and ties Flask blueprints separated by functionality
 
 
+import os
+from dotenv import load_dotenv
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
+# load environmental variables from .env file
+load_dotenv()
+
+
+SECRET_KEY = os.getenv(SECRET_KEY)
 
 db = SQLAlchemy()
 
@@ -12,9 +19,9 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
 
-    app.config['SECRET_KEY'] = 'cowsgomoo'
+    app.config['SECRET_KEY'] = SECRET_KEY
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-
+    
     db.init_app(app)
 
     # login_manager is used to keep track of user session state
