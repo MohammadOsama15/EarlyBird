@@ -1,0 +1,9 @@
+# pip install -r requirements.txt
+flask
+flask_login
+flask_sqlalchemy
+<<<<<<< HEAD
+=======
+flask_login
+>>>>>>> 81c6415 (updated requirements)
+python-dotenv
