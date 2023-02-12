@@ -1,6 +1,13 @@
 {% extends "base.html" %}
-{% block body %}
+{% block content %}
     <body>
-        <p1>This is the search page.</p1>
+        <form method="GET" action="/search">
+            <div class="form-group">
+              <p><label for="search">Search:</label></p>
+              <input type="text" name = "searchTerm">
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
     </body>
 {% endblock %}
