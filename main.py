@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 from . import db
+from .redditAPI import search_posts
 
 main = Blueprint('main', __name__)
 
@@ -27,7 +28,8 @@ def search():
     form_data = request.args
     # The variable query is the term that the user has searched in the search form.
     query = form_data.get("searchTerm")
-    return render_template("search.html")
+    results = search_posts(query)
+    return render_template("search.html", results=results)
 
 
 @main.route('/information')
