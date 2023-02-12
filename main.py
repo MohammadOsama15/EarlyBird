@@ -23,9 +23,10 @@ def profile():
 @main.route('/search')
 @login_required
 def search(): 
+    # the data being requested below is from the search form on the search page.
     form_data = request.args
+    # The variable query is the term that the user has searched in the search form.
     query = form_data.get("searchTerm")
-    # print(query) # Printing out the search term that user puts in the search bar to confirm if the search word is being sent to the main.py.
     return render_template("search.html")
 
 
