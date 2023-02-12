@@ -22,7 +22,11 @@ def profile():
 # log in required to use search feature???
 @main.route('/search')
 @login_required
-def search():
+def search(): 
+    # the data being requested below is from the search form on the search page.
+    form_data = request.args
+    # The variable query is the term that the user has searched in the search form.
+    query = form_data.get("searchTerm")
     return render_template("search.html")
 
 
