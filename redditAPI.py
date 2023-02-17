@@ -3,6 +3,7 @@ import json
 import os
 from dotenv import load_dotenv
 import time
+import re
 
 load_dotenv() 
 
@@ -35,6 +36,15 @@ def get_access_token():
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
         return None
+
+def clean_title(title):
+    # Remove emojis
+    title = title.encode('ascii', 'ignore').decode('ascii')
+    # Remove special characters and digits
+    title = re.sub(r'[^a-zA-Z ]', '', title)
+    # Remove extra whitespaces
+    title = re.sub(r'\s+', ' ', title).strip()
+    return title
 
 def get_posts(query, cap=None):
     if query is None:
@@ -74,6 +84,7 @@ def get_posts(query, cap=None):
         for post in posts:
             title = post['data'].get('title')
             if title is not None and title not in titles:
+                title = clean_title(title)
                 titles.append(title)
                 if len(titles) >= cap:
                     break
