@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 import time
 import re
+import unicodedata
 
 load_dotenv() 
 
@@ -37,14 +38,14 @@ def get_access_token():
         print(f"Error: {e}")
         return None
 
+
 def clean_title(title):
-    # Remove emojis
-    title = title.encode('ascii', 'ignore').decode('ascii')
-    # Remove special characters and digits
-    title = re.sub(r'[^a-zA-Z ]', '', title)
+    # Remove non-ASCII characters
+    title = ''.join(c for c in title if unicodedata.category(c)[0] == 'L')
     # Remove extra whitespaces
-    title = re.sub(r'\s+', ' ', title).strip()
+    title = ' '.join(title.split())
     return title
+
 
 def get_posts(query, cap=None):
     if query is None:
