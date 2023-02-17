@@ -2,6 +2,7 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
+import time
 
 load_dotenv() 
 
@@ -38,14 +39,14 @@ def get_access_token():
 def get_posts(query, cap=None):
     if query is None:
         print("Error: Query parameter is None")
-        return None
+        return
 
     if cap is None:
         cap = 50
 
     token = get_access_token()
     if token is None:
-        return None
+        return
 
     headers = {'Authorization': token, 'User-Agent': 'MyAPI/0.0.1'}
     base_url = 'https://oauth.reddit.com'
@@ -53,26 +54,36 @@ def get_posts(query, cap=None):
 
     if response.status_code != 200:
         print(f"Error: {response.json()['message']}")
-        return None
+        return
 
-    res = requests.get(base_url + '/user/' + query + '/overview', headers=headers)
-    if res.status_code != 200:
-        print(f"Error: {res.json()['message']}")
-        return None
+    path = f'/user/{query}/overview'
+    titles = []
+    after = None
+    while len(titles) < cap:
+        params = {'limit': 100}
+        if after is not None:
+            params['after'] = after
 
-    # already taking care of this above but just a double catch, just in case, so it doesn't break.
-    if res.status_code == 404:
-        print("Reddit user not found.")
-        return None
+        res = requests.get(base_url + path, headers=headers, params=params)
+        if res.status_code != 200:
+            print(f"Error: {res.json()['message']}")
+            return
 
-    posts = res.json()['data']['children'][:cap]
-    titles = set()
-    for post in posts:
-        data = post['data']
-        title = data.get('title', data.get('link_title', None))
-        if title is not None and title not in titles:
-            titles.add(title) #Adds clean title to the set.
-            print(title)
+        data = res.json()['data']
+        posts = data['children']
+        for post in posts:
+            title = post['data'].get('title')
+            if title is not None and title not in titles:
+                titles.append(title)
+                if len(titles) >= cap:
+                    break
+
+        after = data['after']
+        if after is None:
+            break
+
+        time.sleep(1)
+
     if not titles:
         return "Reddit user has no posts."
     return titles

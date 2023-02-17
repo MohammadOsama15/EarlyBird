@@ -11,8 +11,9 @@
     </form>
     {% if results %}
       <ol class="list-group mx-5">
-        {% for title in results %}
-          <li class="list-group-item">{{ title }}</li>
+        {% for title in results %} 
+        
+          <li class="list-group-item">{{loop.index}} {{ title }}</li>
         {% endfor %}
       </ol>
     {% else %}
