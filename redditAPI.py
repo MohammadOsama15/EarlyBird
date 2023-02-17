@@ -40,8 +40,8 @@ def get_access_token():
 
 
 def clean_title(title):
-    # Remove non-ASCII characters
-    title = ''.join(c for c in title if unicodedata.category(c)[0] == 'L')
+    # Remove non-letter characters all of them
+    title = ''.join(c for c in title if unicodedata.category(c)[0] == 'L' or c.isspace())
     # Remove extra whitespaces
     title = ' '.join(title.split())
     return title
@@ -69,6 +69,7 @@ def get_posts(query, cap=None):
 
     path = f'/user/{query}/overview'
     titles = []
+    clean_titles =[]
     after = None
     while len(titles) < cap:
         params = {'limit': 100}
@@ -85,8 +86,9 @@ def get_posts(query, cap=None):
         for post in posts:
             title = post['data'].get('title')
             if title is not None and title not in titles:
-                title = clean_title(title)
-                titles.append(title)
+                clean = clean_title(title)
+                clean_titles.append(clean) #saving it in the array clean_titles 
+                titles.append(title) #displaying normal titles to front end
                 if len(titles) >= cap:
                     break
 
