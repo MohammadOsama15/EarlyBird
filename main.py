@@ -15,7 +15,7 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-
+    
     # pass firstname for greet message
     return render_template("profile.html", name=current_user.firstname)
 
@@ -28,7 +28,7 @@ def search():
     form_data = request.args
     # The variable query is the term that the user has searched in the search form.
     query = form_data.get("searchTerm")
-    results = search_posts(query)
+    results = search_posts(query, cap=50)
     return render_template("search.html", results=results)
 
 
