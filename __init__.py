@@ -1,6 +1,4 @@
 # this module instantiates the app and ties Flask blueprints separated by functionality
-
-
 import os
 from dotenv import load_dotenv
 from flask import Flask
