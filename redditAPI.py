@@ -3,7 +3,6 @@ import json
 import os
 from dotenv import load_dotenv
 import time
-import re
 import unicodedata
 
 load_dotenv() 
@@ -69,7 +68,7 @@ def get_posts(query, cap=None):
 
     path = f'/user/{query}/overview'
     titles = []
-    clean_titles =[]
+    clean_titles =[] # to save all the cleaned up titles
     after = None
     while len(titles) < cap:
         params = {'limit': 100}
