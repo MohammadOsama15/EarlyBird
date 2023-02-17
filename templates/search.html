@@ -1,13 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-    <body>
-        <form method="GET" action="/search">
-            <div class="form-group">
-              <p><label for="search">Search:</label></p>
-              <input type="text" name = "searchTerm">
-            </div>
-            <br>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-    </body>
+<body>
+  <form method="GET" action="/search">
+      <div class="form-group">
+        <p><label for="search">Search:</label></p>
+        <input type="text" name = "searchTerm">
+      </div>
+      <br>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% if results %}
+      <ol class="list-group mx-5">
+        {% for title in results %} 
+        
+          <li class="list-group-item">{{loop.index}} {{ title }}</li>
+        {% endfor %}
+      </ol>
+    {% else %}
+      <p class="text-danger mx-5 mt-5">No results found</p>
+    {% endif %}
+</body>
+
+<style>
+  .list-group { 
+    width: 500px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px gray;
+  }
+</style>
+
+</body>
 {% endblock %}
