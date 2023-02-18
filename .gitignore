@@ -1,2 +1,6 @@
 .env
 __pycache__
+*.100d.txt
+*.h5
+*_trimmed.csv
+*.json
