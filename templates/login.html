@@ -17,6 +17,18 @@
         margin-right: 0;
       }
     }
+    /* password eye toggle */
+    .position-relative {
+      position: relative;
+    }
+
+    .password-toggle-icon {
+      position: absolute;
+      top: 29%;
+      right: 2%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
   </style>
   <!-- p = pad, py => pad y, px => pad x -->
   <div class="container py-4">
@@ -34,8 +46,13 @@
               </div>
               <!-- Password -->
               <div class="form-outline mb-4">
-                <input type="password" class="form-control" name="password" />
-                <label class="form-label">Password</label>
+                <div class="position-relative">
+                  <input type="password" class="form-control" name="password" id="password" />
+                  <label class="form-label" for="password">Password</label>
+                  <span class="password-toggle-icon" onclick="togglePasswordVisibility('password')">
+                    <i class="fas fa-eye-slash"></i>
+                  </span>
+                </div>
               </div>
               <!-- Checkbox -->
               <div class="form-check d-flex justify-content-center mb-4">
@@ -45,7 +62,7 @@
                 </label>
               </div>
               <!-- Submit button -->
-              <button type="submit" class="btn btn-primary btn-block mb-4">
+              <button type="submit" class="btn btn-primary btn-block mb-4" style="background-color: green;">
                 Login
               </button>
               </div>

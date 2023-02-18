@@ -3,11 +3,12 @@
 <body>
   <form method="GET" action="/search">
       <div class="form-group">
+        <span class="search-image"><img src="../static/Robot1.png" style="max-width: 150px; max-height: 150px;"></span> <!--added a demo picture to show where the logo picture will be displayed.-->
         <p><label for="search">Search:</label></p>
-        <input type="text" name = "searchTerm">
+        <input type="text" name="searchTerm" style="width: 500px;"><!--I made the search bar a little longer by giving it a width of 500px.-->
       </div>
       <br>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary" style="background-color: green;">Submit</button><!--I gave the Submit button a green background to make it stand out.-->
     </form>
     {% if results %}
       <ol class="list-group mx-5">
@@ -16,7 +17,7 @@
         {% endfor %}
       </ol>
     {% else %}
-      <p class="text-danger mx-5 mt-5">No results found</p>
+      <p id="no-results" class="text-danger mx-5 mt-5">No results found</p>
     {% endif %}
 </body>
 
@@ -26,7 +27,7 @@
     background-color: rgba(0, 0, 0, 0.05);
     border-radius: 10px;
     box-shadow: 2px 2px 5px gray;
-  }
+  }  
 </style>
 
 </body>

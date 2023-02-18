@@ -22,7 +22,7 @@ def profile():
 
 # log in required to use search feature???
 @main.route('/search')
-@login_required
+@login_required # added this here so that to acess the search page, log in is required.
 def search(): 
     # the data being requested below is from the search form on the search page.
     form_data = request.args
@@ -38,15 +38,18 @@ def information():
 
 
 @main.route('/userTopic')
+@login_required # added this here so that to acess the userTopic page, log in is required.
 def userTopic():
     return render_template("userTopic.html")
 
 
 @main.route('/userSentiment')
+@login_required # added this here so that to acess the userSentiment page, log in is required.
 def userSentiment():
     return render_template("userSentiment.html")
 
 
 @main.route('/topicSentiment')
+@login_required # added this here so that to acess the topicSentiment page, log in is required.
 def topicSentiment():
     return render_template("topicSentiment.html")

@@ -1,9 +1,15 @@
+/* Creating a color theme for the app so if you want to change one color in the code, you can just change here it will autmoatically change in other places */
+:root {
+  --primary-color: #1A1A1B;
+  --secondary-color: #212121;
+  --tertiary-color: #3E3E3F;
+  --text-color: #D9D9D9;
+  --accent-color: #ff5500d0;
+}
+/* Setting background color */
 body {
-  background: #368bc1;
-  background-image: url(bg-img.png);
-  background-repeat: no-repeat;
-  background-position-x: center;
-  min-height: 100vh;
+  background-color: var(--accent-color);
+  /* background-image: url();  Leaving it when we decide on a different background image */
 }
 
 /* hide login welcome message via fadeout */
@@ -35,3 +41,79 @@ body {
     opacity: 0;
   }
 }
+/* When no results is found this is the formatting for it to display that message */
+#no-results {
+  text-align: center;
+  color: white;
+  border-radius: 10px;
+  padding: 10px;
+  color: white !important;
+}
+/* Creating all the below for when we add the following to stick to the theme */
+/* Header theme */
+#header {
+  background-color: var(--secondary-color);
+  border-color: var(--tertiary-color);
+  color: var(--text-color);
+}
+#sr-header-area {
+  background-color: var(--secondary-color);
+}
+/* anchor hovering theme */
+a {
+  color: var(--accent-color);
+}
+a:hover {
+  color: var(--text-color);
+}
+/* button hovering theme */
+button, .btn {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border-color: var(--accent-color);
+}
+button:hover, .btn:hover {
+  background-color: var(--tertiary-color);
+  color: var(--text-color);
+  border-color: var(--tertiary-color);
+}
+input[type="text"], input[type="search"] {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border-color: var(--tertiary-color);
+}
+/* This is for the input box taking grey color */
+input[type="text"]:focus, input[type="search"]:focus {
+  border-color: var(--accent-color);
+}
+/* Side bar theme */
+.side {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+.side .md h1, .side .md h2, .side .md h3, .side .md h4, .side .md h5, .side .md h6 {
+  color: var(--accent-color);
+}
+/* footer theme */
+#footer {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border-color: var(--tertiary-color);
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+/* button theme */
+.btn {
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--accent);
+}
+
+
+
