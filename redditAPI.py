@@ -3,6 +3,7 @@ import json
 import os
 from dotenv import load_dotenv
 import time
+import unicodedata
 
 load_dotenv() 
 
@@ -36,6 +37,15 @@ def get_access_token():
         print(f"Error: {e}")
         return None
 
+
+def clean_title(title):
+    # Remove non-letter characters all of them
+    title = ''.join(c for c in title if unicodedata.category(c)[0] == 'L' or c.isspace())
+    # Remove extra whitespaces
+    title = ' '.join(title.split())
+    return title
+
+
 def get_posts(query, cap=None):
     if query is None:
         print("Error: Query parameter is None")
@@ -58,6 +68,7 @@ def get_posts(query, cap=None):
 
     path = f'/user/{query}/overview'
     titles = []
+    clean_titles =[] # to save all the cleaned up titles
     after = None
     while len(titles) < cap:
         params = {'limit': 100}
@@ -74,7 +85,9 @@ def get_posts(query, cap=None):
         for post in posts:
             title = post['data'].get('title')
             if title is not None and title not in titles:
-                titles.append(title)
+                clean = clean_title(title)
+                clean_titles.append(clean) #saving it in the array clean_titles 
+                titles.append(title) #displaying normal titles to front end
                 if len(titles) >= cap:
                     break
 
