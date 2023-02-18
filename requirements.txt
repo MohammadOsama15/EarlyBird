@@ -1,6 +1,3 @@
-# pip install -r requirements.txt
-flask
-flask_login
-flask_sqlalchemy
-flask_login
-python-dotenv
+version https://git-lfs.github.com/spec/v1
+oid sha256:314bd6e19e6ad1489905822a29c9e921997baf4dad8a2013d2afaf624601533a
+size 297
