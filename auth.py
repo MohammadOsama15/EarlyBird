@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
 from . import db
@@ -9,10 +9,14 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login')
 def login():
+    #Check if the user is authenticated and redirect to search page.
+    if current_user.is_authenticated:
+        return redirect(url_for('main.search'))
+    #Otherwise, render the login page.
     return render_template('login.html')
 
 
-# grab user login details and submit via http POST
+# Grab user login details and submit via http POST
 @auth.route('/login', methods=['POST'])
 def login_post():
 
@@ -22,7 +26,7 @@ def login_post():
 
     user = User.query.filter_by(email=email).first()
 
-    # check whether email exists and hash matches, short circuit user back to login page if credentials do not match
+    # Check whether email exists and hash matches, short circuit user back to login page if credentials do not match
     if not user or not check_password_hash(user.password, password):
         flash("Please check your login details and try again.")
         return redirect(url_for("auth.login"))
@@ -33,6 +37,10 @@ def login_post():
 
 @auth.route('/signup')
 def signup():
+    #Check if the user is authenticated and redirect to search page.
+    if current_user.is_authenticated:
+        return redirect(url_for('main.search'))
+    #Otherwise, render the signup page.
     return render_template('signup.html')
 
 
