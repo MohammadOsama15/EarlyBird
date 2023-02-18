@@ -1,3 +1,12 @@
+# Running the application
+   If in directory:
+   python(3) -m flask --app \_\_init\_\_.py --debug run
+   If in parent directory:
+   python(3) -m flask --app <dirname> --debug run
+
+# Tensorflow for M1/M2 devices
+   https://developer.apple.com/metal/tensorflow-plugin/
+
 # .env
 A .env file is used in conjunction with .gitignore to obscure sensitive information. To set up the .env:
 
