@@ -1,7 +1,6 @@
 from dotenv import load_dotenv
 import os
 import requests
-
 # Load environmental variables. By default, dotenv searches current directory for .env file
 # A custom filepath to the .env file can be supplied as the argument
 load_dotenv()
