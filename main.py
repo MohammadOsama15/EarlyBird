@@ -32,10 +32,12 @@ def search():
     # The variable query is the term that the user has searched in the search form.
     query = form_data.get("searchTerm")
     results = search_posts(query, cap=50)
-    tokenized_sequence = tokenize_sequence(results)
-    predictions = model.predict(tokenized_sequence)
-    display = zip(predictions, results)
-    return render_template("search.html", display=display)
+    if results:
+        tokenized_sequence = tokenize_sequence(results)
+        predictions = model.predict(tokenized_sequence)
+        display = zip(predictions, results)
+        return render_template("search.html", display=display)
+    return render_template("search.html")
 
 
 @main.route('/information')
