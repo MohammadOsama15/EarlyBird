@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 from . import db
 from .redditAPI import search_posts
-from inference import model, tokenize_sequence
+from .inference import model, tokenize_sequence
 
 
 main = Blueprint('main', __name__)
