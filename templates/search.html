@@ -11,10 +11,10 @@
       <br>
       <button type="submit" class="btn btn-primary" style="background-color: green;">Submit</button><!--I gave the Submit button a green background to make it stand out.-->
     </form>
-    {% if results %}
+    {% if display %}
       <ol class="list-group mx-5">
-        {% for title in results %}
-          <li class="list-group-item">{{ title }}</li>
+        {% for title, prediction in display %}
+          <li class="list-group-item">{{ title }} {{ prediction }}</li>
         {% endfor %}
       </ol>
     {% else %}

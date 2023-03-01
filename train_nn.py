@@ -6,11 +6,11 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from keras_preprocessing.text import Tokenizer, tokenizer_from_json
 from keras_preprocessing.sequence import pad_sequences
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Embedding, LSTM, Dense, Bidirectional
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-from tensorflow.keras.models import load_model
+from keras import Sequential
+from keras.layers import Embedding, LSTM, Dense, Bidirectional
+from keras.optimizers import Adam
+from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.models import load_model
 
 # import dataframe
 df = pd.read_csv("sentiment140_trimmed.csv")
