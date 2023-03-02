@@ -8,13 +8,10 @@ MAX_LENGTH = 100
 PADDING_TYPE = 'post'
 TRUNCATION_TYPE = 'post'
 
-
 model = load_model("model.h5")
 with open('tokens.json') as f:
     data = json.load(f)
     Tokenizer = tokenizer_from_json(data)
-
-model.summary()
 
 
 def tokenize_sequence(text: list):

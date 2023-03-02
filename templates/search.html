@@ -6,14 +6,14 @@
 
         <span class="search-image"><img src="../static/Robot1.png" style="max-width: 150px; max-height: 150px;"></span> <!--added a demo picture to show where the logo picture will be displayed.-->
         <p><label for="search">Search:</label></p>
-        <input type="text" name="searchTerm" style="width: 500px;"><!--I made the search bar a little longer by giving it a width of 500px.-->
+        <input type="text" name="searchTerm" style="width: 80vw;"><!--I made the search bar a little longer by giving it a width of 500px.-->
       </div>
       <br>
       <button type="submit" class="btn btn-primary" style="background-color: green;">Submit</button><!--I gave the Submit button a green background to make it stand out.-->
     </form>
-    {% if display %}
+    {% if data %}
       <ol class="list-group mx-5">
-        {% for title, prediction in display %}
+        {% for title, prediction in data %}
           <li class="list-group-item">{{ title }} {{ prediction }}</li>
         {% endfor %}
       </ol>

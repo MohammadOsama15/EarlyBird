@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_caching import Cache
 
 
 # load environmental variables from .env file
@@ -14,6 +15,7 @@ load_dotenv()
 SECRET_KEY = os.getenv("EB_SECRET")
 
 db = SQLAlchemy()
+cache = Cache(config={'CACHE_TYPE': 'simple'})
 
 
 def create_app():
@@ -21,8 +23,10 @@ def create_app():
 
     app.config['SECRET_KEY'] = SECRET_KEY
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-    
+    app.config['DEBUG'] = True
+
     db.init_app(app)
+    cache.init_app(app)
 
     # login_manager is used to keep track of user session state
     login_manager = LoginManager()
