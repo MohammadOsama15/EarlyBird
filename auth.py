@@ -55,7 +55,7 @@ def signup_post():
 
     # checks whether email is already in use
     user = User.query.filter_by(email=email).first()
-    print(user)
+   
 
     # if record exists, force signup again
     if user:
