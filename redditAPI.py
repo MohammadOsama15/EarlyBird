@@ -22,8 +22,14 @@ def get_access_token():
     }
 
     headers = {'User-Agent': 'MyAPI/0.0.1'}
-    res = requests.post('https://www.reddit.com/api/v1/access_token',
-                        auth=auth, data=data, headers=headers)
+    try:
+        res = requests.post('https://www.reddit.com/api/v1/access_token',
+                            auth=auth, data=data, headers=headers)
+        res.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        print(f"Error getting access token: {e}")
+        return None
+
     try:
         d = res.json()
         if 'access_token' not in d:
@@ -31,11 +37,8 @@ def get_access_token():
             return None
 
         return f"bearer {d['access_token']}"
-    except json.decoder.JSONDecodeError:
-        print(f"Error: Could not decode JSON response from Reddit API")
-        return None
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
+    except (json.decoder.JSONDecodeError, KeyError):
+        print(f"Error decoding JSON response from Reddit API")
         return None
 
 
@@ -62,10 +65,11 @@ def get_posts(query, cap=None):
 
     headers = {'Authorization': token, 'User-Agent': 'MyAPI/0.0.1'}
     base_url = 'https://oauth.reddit.com'
-    response = requests.get(base_url + '/api/v1/me', headers=headers)
-
-    if response.status_code != 200:
-        print(f"Error: {response.json()['message']}")
+    try:
+        response = requests.get(base_url + '/api/v1/me', headers=headers)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        print(f"Error getting user info: {e}")
         return
 
     path = f'/user/{query}/overview'
@@ -77,13 +81,20 @@ def get_posts(query, cap=None):
         if after is not None:
             params['after'] = after
 
-        res = requests.get(base_url + path, headers=headers, params=params)
-        if res.status_code != 200:
-            print(f"Error: {res.json()['message']}")
+        try:
+            res = requests.get(base_url + path, headers=headers, params=params)
+            res.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            print(f"Error getting posts: {e}")
             return
 
-        data = res.json()['data']
-        posts = data['children']
+        try:
+            data = res.json()['data']
+            posts = data['children']
+        except (json.decoder.JSONDecodeError, KeyError):
+            print(f"Error decoding JSON response from Reddit API")
+            return
+
         for post in posts:
             title = post['data'].get('title')
             if title is not None and title not in titles:

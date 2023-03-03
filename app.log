@@ -1,0 +1,49 @@
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 777-007-092
+INFO:werkzeug: * Detected change in '/home/mosama1/earlyBird/db_functions.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 777-007-092
+ERROR:earlyBird.db_functions:Error storing prediction for essen11 in database: (builtins.ValueError) could not convert string to float: 'Consultants want up to £262 an hour to cover strike days for junior doctors | Greedy or genious way to show strike sympathy?'
+[SQL: INSERT INTO predictions (fk, comment, prediction) VALUES (?, ?, ?)]
+[parameters: [{'prediction': 'Consultants want up to £262 an hour to cover strike days for junior doctors | Greedy or genious way to show strike sympathy?', 'comment': array([0.0773244], dtype=float32), 'fk': 'essen11'}]]
+ERROR:root:Error storing prediction for essen11 in database: (builtins.ValueError) could not convert string to float: 'Consultants want up to £262 an hour to cover strike days for junior doctors | Greedy or genious way to show strike sympathy?'
+[SQL: INSERT INTO predictions (fk, comment, prediction) VALUES (?, ?, ?)]
+[parameters: [{'prediction': 'Consultants want up to £262 an hour to cover strike days for junior doctors | Greedy or genious way to show strike sympathy?', 'comment': array([0.0773244], dtype=float32), 'fk': 'essen11'}]]
+ERROR:root:No data received from API.
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:10:32] "[35m[1mGET /search?searchTerm=essen11 HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:10:32] "[36mGET /search?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:10:32] "[36mGET /search?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:10:32] "[36mGET /search?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 777-007-092
+INFO:werkzeug: * Detected change in '/home/mosama1/earlyBird/main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 777-007-092
+ERROR:root:local variable 'data' referenced before assignment
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:11] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:11] "[35m[1mGET /search?searchTerm=essen11 HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:11] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:13] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:13] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:15] "GET /profile HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:15] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:16] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:16] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:17] "GET /search HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:17] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:17] "[36mGET /static/Robot1.png HTTP/1.1[0m" 304 -
+ERROR:root:local variable 'data' referenced before assignment
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:20] "[35m[1mGET /search?searchTerm=essen11 HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:20] "[36mGET /search?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:20] "[36mGET /search?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:20] "[36mGET /search?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [02/Mar/2023 20:12:20] "[36mGET /search?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in '/home/mosama1/earlyBird/main.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
