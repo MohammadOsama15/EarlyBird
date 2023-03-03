@@ -70,21 +70,21 @@ a:hover {
 button, .btn {
   background-color: var(--accent-color);
   color: var(--text-color);
-  border-color: var(--accent-color);
+  /* border-color: var(--accent-color); */
 }
 button:hover, .btn:hover {
   background-color: var(--tertiary-color);
   color: var(--text-color);
-  border-color: var(--tertiary-color);
+  /* border-color: var(--tertiary-color); */
 }
 input[type="text"], input[type="search"] {
   background-color: var(--secondary-color);
   color: var(--text-color);
-  border-color: var(--tertiary-color);
+  /* border-color: var(--tertiary-color); */
 }
 /* This is for the input box taking grey color */
 input[type="text"]:focus, input[type="search"]:focus {
-  border-color: var(--accent-color);
+  /* border-color: var(--accent-color); */
 }
 /* Side bar theme */
 .side {
@@ -98,7 +98,7 @@ input[type="text"]:focus, input[type="search"]:focus {
 #footer {
   background-color: var(--secondary-color);
   color: var(--text-color);
-  border-color: var(--tertiary-color);
+  /* border-color: var(--tertiary-color); */
 }
 body {
   margin: 0;
@@ -112,7 +112,7 @@ body {
 }
 .btn-primary {
   background-color: var(--primary-color);
-  border-color: var(--accent);
+  /* border-color: var(--accent); */
 }
 
 

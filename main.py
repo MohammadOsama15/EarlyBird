@@ -26,14 +26,15 @@ def profile():
 @main.route('/search')
 @login_required
 def search():
-    print('woot')
+    queried = False
     # the data being requested below is from the search form on the search page.
     query = request.args.get("searchTerm")
-    data = submit_query(query, cap=10000)
-    if data:
-        return render_template("search.html", data=data)
-    else:
-        return render_template("search.html")
+    if query is not None:
+        queried = True
+        data = submit_query(query, cap=10000)
+        if data:
+            return render_template("search.html", data=data)
+    return render_template("search.html", queried=queried)
 
 
 @main.route('/information')
@@ -49,5 +50,4 @@ def submit_query(query: str, cap: int):
         predictions = model.predict(tokenized_sequence)
         data = zip(predictions, results)
         return data
-    else:
-        return
+    return
