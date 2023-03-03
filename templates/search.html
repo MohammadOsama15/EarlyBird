@@ -18,8 +18,6 @@
       {% for title, prediction in data %}
         {% if prediction|float < 0.5 %}
           <li class="list-group-item list-group-item-danger">{{ title }} {{ prediction }} <i class="fas fa-frown"></i></li> 
-        {% elif prediction|float == 0.5 %}
-        <li class="list-group-item list-group-item-warning">{{ title }} {{ prediction }}</li> 
         {% else %}
           <li class="list-group-item list-group-item-success">{{ title }} {{ prediction }}  <i class="fas fa-grin"></i></li>
         {% endif %}

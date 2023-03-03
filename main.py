@@ -81,7 +81,7 @@ def submit_query(query: str, cap: int):
         if results:
             tokenized_sequence = tokenize_sequence(results)
             predictions = model.predict(tokenized_sequence)
-            data = zip(predictions, results)
+            data = zip(results, predictions)
             return data
     except Exception as e:
         logger.error(f"An error occurred while submitting a search query for user {current_user}: {str(e)}")
