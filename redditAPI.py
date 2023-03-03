@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 import time
 import unicodedata
 
-load_dotenv() 
+load_dotenv()
+
 
 def get_access_token():
     CLIENT_ID = os.getenv("CLIENT_ID")
@@ -40,7 +41,8 @@ def get_access_token():
 
 def clean_title(title):
     # Remove non-letter characters all of them
-    title = ''.join(c for c in title if unicodedata.category(c)[0] == 'L' or c.isspace())
+    title = ''.join(c for c in title if unicodedata.category(c)
+                    [0] == 'L' or c.isspace())
     # Remove extra whitespaces
     title = ' '.join(title.split())
     return title
@@ -68,7 +70,7 @@ def get_posts(query, cap=None):
 
     path = f'/user/{query}/overview'
     titles = []
-    clean_titles =[] # to save all the cleaned up titles
+    clean_titles = []  # to save all the cleaned up titles
     after = None
     while len(titles) < cap:
         params = {'limit': 100}
@@ -86,8 +88,9 @@ def get_posts(query, cap=None):
             title = post['data'].get('title')
             if title is not None and title not in titles:
                 clean = clean_title(title)
-                clean_titles.append(clean) #saving it in the array clean_titles 
-                titles.append(title) #displaying normal titles to front end
+                # saving it in the array clean_titles
+                clean_titles.append(clean)
+                titles.append(title)  # displaying normal titles to front end
                 if len(titles) >= cap:
                     break
 
@@ -98,13 +101,5 @@ def get_posts(query, cap=None):
         time.sleep(1)
 
     if not titles:
-        return "Reddit user has no posts."
-    return titles
-
-def search_posts(query, cap=None):
-    titles = get_posts(query, cap)
-    if titles is None:
-        return None
-
-    # Perform additional processing on the returned titles, if needed.
+        return
     return titles
