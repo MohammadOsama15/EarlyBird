@@ -4,12 +4,11 @@
   --secondary-color: #212121;
   --tertiary-color: #3E3E3F;
   --text-color: #D9D9D9;
-  --accent-color: #ff5500d0;
+  --accent-color: #ff5500b0;
 }
 /* Setting background color */
 body {
   background-color: var(--accent-color);
-  /* background-image: url();  Leaving it when we decide on a different background image */
 }
 
 /* hide login welcome message via fadeout */
