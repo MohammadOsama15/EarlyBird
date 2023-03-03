@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 from . import db
-from .redditAPI import search_posts
-from .inference import model, tokenize_sequence
+from . import cache
+from redditAPI import get_posts
+from inference import model, tokenize_sequence
 
 
 main = Blueprint('main', __name__)
@@ -22,22 +23,18 @@ def profile():
     return render_template("profile.html", name=current_user.firstname)
 
 
-# log in required to use search feature???
 @main.route('/search')
-# added this here so that to acess the search page, log in is required.
 @login_required
 def search():
+    queried = False
     # the data being requested below is from the search form on the search page.
-    form_data = request.args
-    # The variable query is the term that the user has searched in the search form.
-    query = form_data.get("searchTerm")
-    results = search_posts(query, cap=50)
-    if results:
-        tokenized_sequence = tokenize_sequence(results)
-        predictions = model.predict(tokenized_sequence)
-        display = zip(predictions, results)
-        return render_template("search.html", display=display)
-    return render_template("search.html")
+    query = request.args.get("searchTerm")
+    if query is not None:
+        queried = True
+        data = submit_query(query, cap=10000)
+        if data:
+            return render_template("search.html", data=data)
+    return render_template("search.html", queried=queried)
 
 
 @main.route('/information')
@@ -45,22 +42,12 @@ def information():
     return render_template("information.html")
 
 
-@main.route('/userTopic')
-# added this here so that to acess the userTopic page, log in is required.
-@login_required
-def userTopic():
-    return render_template("userTopic.html")
-
-
-@main.route('/userSentiment')
-# added this here so that to acess the userSentiment page, log in is required.
-@login_required
-def userSentiment():
-    return render_template("userSentiment.html")
-
-
-@main.route('/topicSentiment')
-# added this here so that to acess the topicSentiment page, log in is required.
-@login_required
-def topicSentiment():
-    return render_template("topicSentiment.html")
+@cache.memoize(timeout=3600)
+def submit_query(query: str, cap: int):
+    results = get_posts(query=query, cap=cap)
+    if results:
+        tokenized_sequence = tokenize_sequence(results)
+        predictions = model.predict(tokenized_sequence)
+        data = zip(predictions, results)
+        return data
+    return

@@ -1,35 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
-<body>
   <form method="GET" action="/search">
-      <div class="form-group">
-
-        <span class="search-image"><img src="../static/Robot1.png" style="max-width: 150px; max-height: 150px;"></span> <!--added a demo picture to show where the logo picture will be displayed.-->
-        <p><label for="search">Search:</label></p>
-        <input type="text" name="searchTerm" style="width: 500px;"><!--I made the search bar a little longer by giving it a width of 500px.-->
+    <div class="form-group col-sm-10 col-md-10 col-lg-8 mx-auto mb-3">
+      <div class="search-image mt-3"><img src="../static/Robot1.png" style="max-width: 150px; max-height: 150px;"></div> 
+      <div class="input-group my-3">
+        <input type="search" class="form-control" name="searchTerm" placeholder="Search Reddit"id="searchbox">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="submit">
+            <span class="fa fa-search"></span>
+          </button>
+        </div>
       </div>
-      <br>
-      <button type="submit" class="btn btn-primary" style="background-color: green;">Submit</button><!--I gave the Submit button a green background to make it stand out.-->
-    </form>
-    {% if display %}
-      <ol class="list-group mx-5">
-        {% for title, prediction in display %}
-          <li class="list-group-item">{{ title }} {{ prediction }}</li>
-        {% endfor %}
-      </ol>
-    {% else %}
-      <p id="no-results" class="text-danger mx-5 mt-5">No results found</p>
-    {% endif %}
-</body>
-
-<style>
-  .list-group { 
-    width: 500px;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-    box-shadow: 2px 2px 5px gray;
-  }  
-</style>
-
-</body>
+    </div>
+  {% if data %}
+    <ol class="list-group col-sm-10 col-md-10 col-lg-8 mx-auto">
+      {% for title, prediction in data %}
+        <li class="list-group-item">{{ title }} {{ prediction }}</li>
+      {% endfor %}
+    </ol>
+  {% elif queried %}
+    <script>
+      document.getElementsByName('searchTerm')[0].placeholder='No results found, please try another Reddit username.';
+    </script>
+  {% endif %}
+  <style>
+    .btn{
+      background-color:rgb(80, 80, 80);
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    #searchbox{
+      background-color:rgb(255,255,255);
+    }
+  </style>
 {% endblock %}
