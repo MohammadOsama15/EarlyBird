@@ -14,7 +14,8 @@ file_handler.setLevel(logging.INFO)
 # Add the file handler to the logger
 logger.addHandler(file_handler)
 
-def store_query(handle:str):
+
+def store_query(handle: str):
     """
     store query and timestamp into db
     parameters: query:      a reddit handle
@@ -29,10 +30,11 @@ def store_query(handle:str):
         raise ValueError(f"Error storing query {handle} in database: {e}")
     return
 
-def delete_query(handle:str):
+
+def delete_query(handle: str):
     try:
-        query = Query.query.filter_by(query=query).first()
-        if query: 
+        query = Query.query.filter_by(query=handle).first()
+        if query:
             db.session.delete(query)
             db.session.commit()
     except Exception as e:
@@ -41,7 +43,8 @@ def delete_query(handle:str):
         raise ValueError(f"Error deleting query {handle} from database: {e}")
     return
 
-def fetch_results(fk:str):
+
+def fetch_results(fk: str):
     try:
         query = Predictions.query.filter_by(fk=fk)
         if query:
@@ -56,7 +59,8 @@ def fetch_results(fk:str):
         db.session.rollback()
         raise ValueError(f"Error fetching results for {fk} from database: {e}")
 
-def store_prediction(fk, predictions:zip):
+
+def store_prediction(fk, predictions: zip):
     """
     stores results into table, each text corpus (comment or post) is paired with a prediction
     parameters: 
@@ -65,7 +69,8 @@ def store_prediction(fk, predictions:zip):
     """
     try:
         for comment, prediction in predictions:
-            new_entry = Predictions(fk = fk, comment=comment, prediction = prediction)
+            new_entry = Predictions(
+                fk=fk, comment=comment, prediction=prediction)
             db.session.add(new_entry)
         db.session.commit()
     except Exception as e:
@@ -75,16 +80,19 @@ def store_prediction(fk, predictions:zip):
     return
 
 
-def check_presence(query:str):
+def check_presence(query: str):
     try:
         query = Query.query.filter_by(query=query).first()
         if query:
             return query.time()
     except Exception as e:
-        logger.error(f"Error checking presence of query {query} in database: {e}")
+        logger.error(
+            f"Error checking presence of query {query} in database: {e}")
         db.session.rollback()
-        raise ValueError(f"Error checking presence of query {query} in database: {e}")
+        raise ValueError(
+            f"Error checking presence of query {query} in database: {e}")
     return
+
 
 # Remove the file handler from the logger
 logger.removeHandler(file_handler)
