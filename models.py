@@ -12,9 +12,15 @@ class User(UserMixin, db.Model):
     lastname = db.Column(db.String(200))
 
 
-# Tweet storage data structure
-class Tweets(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    tweet = db.Column(db.String(280))
+# table for search box input and time associated with query
+class Query(db.Model):
+    handle = db.Column(db.String(280), primary_key=True)
     time = db.Column(db.DateTime)
-    sentiment_score = db.Column(db.Float)
+
+
+# table for strings and predictions associated with them
+class Predictions(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    fk = db.Column(db.String(280))
+    comment = db.Column(db.Text(65535))
+    prediction = db.Column(db.Float)
