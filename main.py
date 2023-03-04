@@ -51,6 +51,6 @@ def submit_query(query: str, cap: int):
     if results:
         tokenized_sequence = tokenize_sequence(results)
         predictions = model.predict(tokenized_sequence)
-        data = zip(predictions, results)
+        data = zip(results, predictions)
         return data
     return
