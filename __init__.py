@@ -10,7 +10,6 @@ from flask_caching import Cache
 # load environmental variables from .env file
 load_dotenv()
 
-
 # this is used to encrypt our cookie
 SECRET_KEY = os.getenv("EB_SECRET")
 
@@ -25,8 +24,15 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     app.config['DEBUG'] = True
 
-    db.init_app(app)
-    cache.init_app(app)
+    try:
+        db.init_app(app)
+    except Exception as e:
+        print(f"Error initializing database: {str(e)}")
+
+    try:
+        cache.init_app(app)
+    except Exception as e:
+        print(f"Error initializing cache: {str(e)}")
 
     # login_manager is used to keep track of user session state
     login_manager = LoginManager()
@@ -34,7 +40,7 @@ def create_app():
     login_manager.init_app(app)
 
     # import python module used for authentication
-    from .auth import auth as auth_blueprint
+    from .auth import auth as auth_blueprint    
     app.register_blueprint(auth_blueprint)
 
     from .main import main as main_blueprint
@@ -50,6 +56,9 @@ def create_app():
 
     # create db if one is not already present
     with app.app_context():
-        db.create_all()
+        try:
+            db.create_all()
+        except Exception as e:
+            print(f"Error creating database: {str(e)}")
 
     return app

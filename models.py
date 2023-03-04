@@ -17,10 +17,15 @@ class Query(db.Model):
     handle = db.Column(db.String(280), primary_key=True)
     time = db.Column(db.DateTime)
 
-
 # table for strings and predictions associated with them
 class Predictions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fk = db.Column(db.String(280))
     comment = db.Column(db.Text(65535))
     prediction = db.Column(db.Float)
+
+# error handling
+try:
+    db.create_all()
+except Exception as e:
+    print("Error creating database: ", str(e))
