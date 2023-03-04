@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
   <form method="GET" action="/search">
-    <div class="form-group col-sm-10 col-md-10 col-lg-8 mx-auto mb-3">
-      <div class="search-image mt-3"><img src="../static/Robot1.png" style="max-width: 150px; max-height: 150px;"></div> 
+    <div class="form-group col-sm-12 col-md-10 col-lg-8 mx-auto mb-3">
+      <div class="search-image mt-3"><img src="../static/reddit_logo_1.png" style="max-width: 150px; max-height: 150px;"></div> 
       <div class="input-group my-3">
         <input type="search" class="form-control" name="searchTerm" placeholder="Search Reddit"id="searchbox">
         <div class="input-group-append">
@@ -13,11 +13,20 @@
       </div>
     </div>
   {% if data %}
-    <ol class="list-group col-sm-10 col-md-10 col-lg-8 mx-auto">
+  <div class="container col-lg-12">
+    <ol class="list-group col-sm-12 col-md-10 col-lg-8 mx-auto">
       {% for title, prediction in data %}
-        <li class="list-group-item">{{ title }} {{ prediction }}</li>
+        {% if prediction|float < 0.5 %}
+          <li class="list-group-item list-group-item-danger">{{ title }} {{ prediction }} <i class="fas fa-frown"></i></li> 
+        {% elif prediction|float == 0.5 %}
+        <li class="list-group-item list-group-item-warning">{{ title }} {{ prediction }}</li> 
+        {% else %}
+          <li class="list-group-item list-group-item-success">{{ title }} {{ prediction }}  <i class="fas fa-grin"></i></li>
+        {% endif %}
       {% endfor %}
     </ol>
+  </div>
+
   {% elif queried %}
     <script>
       document.getElementsByName('searchTerm')[0].placeholder='No results found, please try another Reddit username.';

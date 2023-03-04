@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from . import db
 from . import cache
 from .redditAPI import get_posts
@@ -8,7 +9,6 @@ from .db_functions import check_presence, store_query, delete_query, store_predi
 from datetime import timedelta
 import datetime
 import logging
-
 
 main = Blueprint('main', __name__)
 
@@ -22,6 +22,8 @@ logger.addHandler(file_handler)
 
 @main.route('/')
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.search'))
     return render_template("index.html")
 
 
@@ -55,6 +57,7 @@ def search():
                 else:
                     data = fetch_results(fk=query)
             else:
+
                 data = submit_query(query, cap=50)
             if data:
                 if expired:
@@ -84,3 +87,4 @@ def submit_query(query: str, cap: int):
         logger.error(f"An error occurred while submitting a search query for user {current_user}: {str(e)}")
         return render_template("error.html", message="An error occurred while processing your search request. Please try again later.")
     return
+
