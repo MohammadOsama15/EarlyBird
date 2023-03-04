@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from . import db
 from . import cache
-from redditAPI import get_posts
-from inference import model, tokenize_sequence
+from .redditAPI import get_posts
+from .inference import model, tokenize_sequence
 
 
 main = Blueprint('main', __name__)
@@ -11,6 +12,8 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.search'))
     return render_template("index.html")
 
 
@@ -31,7 +34,7 @@ def search():
     query = request.args.get("searchTerm")
     if query is not None:
         queried = True
-        data = submit_query(query, cap=10000)
+        data = submit_query(query, cap=50)
         if data:
             return render_template("search.html", data=data)
     return render_template("search.html", queried=queried)
