@@ -1,7 +1,6 @@
 import logging
-from .models import User, Query, Predictions
+from .models import Query, Predictions
 import datetime
-from flask import Blueprint
 from . import db
 
 logger = logging.getLogger(__name__)
@@ -62,9 +61,9 @@ def fetch_results(fk: str):
 
 def store_prediction(fk, predictions: zip):
     """
-    stores results into table, each text corpus (comment or post) is paired with a prediction
-    parameters: 
-        fk:             foreign key (unique reddit handle) stored in a different database
+    stores corpus and predictions into db
+    parameters:
+        fk:             foreign key (unique reddit handle)
         predictions:    a zipped object consisting of corpus and predictions
     """
     try:

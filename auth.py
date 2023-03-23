@@ -47,7 +47,7 @@ def signup_post():
     user = User.query.filter_by(email=email).first()
 
     if user:
-        flash("This email address has already been taken. Please use a different one.")
+        flash("This email address has already been taken.")
         return redirect(url_for('auth.signup'))
 
     new_user = User(email=email, firstname=firstname, lastname=lastname,

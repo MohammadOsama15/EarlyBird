@@ -38,7 +38,7 @@ def get_access_token():
 
         return f"bearer {d['access_token']}"
     except (json.decoder.JSONDecodeError, KeyError):
-        print(f"Error decoding JSON response from Reddit API")
+        print("Error decoding JSON response from Reddit API")
         return None
 
 
@@ -92,7 +92,7 @@ def get_posts(query, cap=None):
             data = res.json()['data']
             posts = data['children']
         except (json.decoder.JSONDecodeError, KeyError):
-            print(f"Error decoding JSON response from Reddit API")
+            print("Error decoding JSON response from Reddit API")
             return
 
         for post in posts:

@@ -1,10 +1,9 @@
-import h5py
 import io
 import json
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from keras_preprocessing.text import Tokenizer, tokenizer_from_json
+from keras_preprocessing.text import tokenizer_from_json
 from keras_preprocessing.sequence import pad_sequences
 from keras import Sequential
 from keras.layers import Embedding, LSTM, Dense, Bidirectional
@@ -81,13 +80,19 @@ else:
 X_train_sequences = Tokenizer.texts_to_sequences(X_train)
 X_test_sequences = Tokenizer.texts_to_sequences(X_test)
 
-# pad or truncate sequences to achieve uniformity, note that 100 matches GloVe dataset dimension used for embedding
+# pad or truncate sequences to achieve uniformity
 padding_type = 'post'
 truncation_type = 'post'
 X_test_padded = pad_sequences(
-    X_test_sequences, maxlen=max_length, padding=padding_type, truncating=truncation_type)
-X_train_padded = pad_sequences(X_train_sequences, maxlen=max_length, padding=padding_type,
-                               truncating=truncation_type)
+    X_test_sequences,
+    maxlen=max_length,
+    padding=padding_type,
+    truncating=truncation_type)
+X_train_padded = pad_sequences(
+    X_train_sequences,
+    maxlen=max_length,
+    padding=padding_type,
+    truncating=truncation_type)
 # specify number of epochs
 num_epochs = 30
 # callbacks
@@ -97,8 +102,12 @@ file = "model.h5"
 checkpoint = ModelCheckpoint(
     file, monitor='loss', verbose=1, save_best_only=True, mode='min')
 callbacks_list = [checkpoint, early_stop]
-model.fit(X_train_padded, y_train, epochs=num_epochs, validation_data=(X_test_padded, y_test),
-          callbacks=callbacks_list)
+model.fit(
+    X_train_padded,
+    y_train,
+    epochs=num_epochs,
+    validation_data=(X_test_padded, y_test),
+    callbacks=callbacks_list)
 model.save("model_final.h5")
 
 
