@@ -1,6 +1,7 @@
 import unittest
 from redditAPI import clean_title
 
+
 class TestCleanTitle(unittest.TestCase):
 
     def test_remove_non_letter_characters(self):

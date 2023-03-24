@@ -3,9 +3,8 @@ from flask import Blueprint, render_template, redirect, url_for, request
 from . import cache
 from .redditAPI import get_posts
 from .inference import model, tokenize_sequence
-from .db_functions import check_timestamp, fetch_results
-from .db_functions import store_query, store_prediction
-from .db_functions import delete_predictions, delete_query
+from .db_functions import get_timestamp, store_timestamp, delete_timestamp
+from .db_functions import get_predictions, store_prediction, delete_predictions
 from datetime import timedelta
 import datetime
 import logging
@@ -39,32 +38,27 @@ def search():
     query = request.args.get("searchTerm")
     if query is not None:
         queried = True
-        try:
-            timestamp = check_timestamp(query)
-            if timestamp:
-                time = timestamp + timedelta(hours=24)
-                now = datetime.datetime.utcnow()
-                print(now)
-                if time < now:
-                    delete_query(handle=query)
-                    delete_predictions(fk=query)
-                    data = submit_query(query, cap=50)
-                else:
-                    data = fetch_results(fk=query)
-                    print("fetching results")
-            else:
-                data = submit_query(query, cap=50)
-                delete_query(handle=query)
+        timestamp_from_db = get_timestamp(search_term=query)
+        predictions_from_db = get_predictions(fk=query)
+        if timestamp_from_db and predictions_from_db:
+            time = timestamp_from_db + timedelta(hours=24)
+            now = datetime.datetime.utcnow()
+            if time < now:
+                delete_timestamp(search_term=query)
                 delete_predictions(fk=query)
-                store_query(handle=query)
-                store_prediction(fk=query, predictions=data)
-                print("prediction stored")
+                data = submit_query(query, cap=50)
+                if data:
+                    store_timestamp(search_term=query)
+                    store_prediction(fk=query, predictions=data)
+            else:
+                data = predictions_from_db
+        else:
+            data = submit_query(query, cap=50)
             if data:
-                print("data has been returned")
-                return render_template("search.html", data=data)
-        except Exception as e:
-            logger.error(
-                f"Error querying user {current_user}: {str(e)}")
+                store_timestamp(search_term=query)
+                store_prediction(fk=query, predictions=data)
+        if data:
+            return render_template("search.html", data=data)
     return render_template("search.html", queried=queried)
 
 

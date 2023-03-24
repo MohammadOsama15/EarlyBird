@@ -10,8 +10,8 @@ class User(UserMixin, db.Model):
     lastname = db.Column(db.String(200))
 
 
-class Query(db.Model):
-    handle = db.Column(db.String(280), primary_key=True)
+class Timestamp(db.Model):
+    search_term = db.Column(db.String(280), primary_key=True)
     time = db.Column(db.DateTime)
 
 
