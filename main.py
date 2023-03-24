@@ -1,10 +1,10 @@
 from flask_login import login_required, current_user
 from flask import Blueprint, render_template, redirect, url_for, request
 from . import cache
-from redditAPI import get_posts
-from inference import model, tokenize_sequence
-from db_functions import get_timestamp, store_timestamp, delete_timestamp
-from db_functions import get_predictions, store_prediction, delete_predictions
+from .redditAPI import get_posts
+from .inference import model, tokenize_sequence
+from .db_functions import get_timestamp, store_timestamp, delete_timestamp
+from .db_functions import get_predictions, store_prediction, delete_predictions
 from datetime import timedelta
 import datetime
 import logging
@@ -36,30 +36,38 @@ def profile():
 def search():
     queried = False
     query = request.args.get("searchTerm")
-    if query is not None:
+    if query:
+        print("query is not none")
         queried = True
         timestamp_from_db = get_timestamp(search_term=query)
+        print(timestamp_from_db)
         predictions_from_db = get_predictions(fk=query)
         if timestamp_from_db and predictions_from_db:
+            print("timestamp and predictions from db present")
             time = timestamp_from_db + timedelta(hours=24)
             now = datetime.datetime.utcnow()
             if time < now:
+                print("record is expired")
                 delete_timestamp(search_term=query)
                 delete_predictions(fk=query)
                 data = submit_query(query, cap=50)
                 if data:
+                    print("data is not none")
                     store_timestamp(search_term=query)
                     store_prediction(fk=query, predictions=data)
                     return render_template("search.html", data=data)
             else:
                 data = predictions_from_db
+                print("data is from db")
                 return render_template("search.html", data=data)
         else:
+            print("grabbing data from reddit")
             data = submit_query(query, cap=50)
             if data:
                 store_timestamp(search_term=query)
                 store_prediction(fk=query, predictions=data)
                 return render_template("search.html", data=data)
+    print("reached no result display")
     return render_template("search.html", queried=queried)
 
 
@@ -77,7 +85,7 @@ def submit_query(query: str, cap: int):
             predictions = model.predict(tokenized_sequence)
             data = zip(results, predictions)
             return data
+        return
     except Exception as e:
         logger.error(
             f"Error querying user {current_user}: {str(e)}")
-    return

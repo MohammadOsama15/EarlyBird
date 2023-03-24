@@ -1,5 +1,5 @@
 import logging
-from models import Timestamp, Predictions
+from .models import Timestamp, Predictions
 import datetime
 from . import db
 
@@ -43,7 +43,6 @@ def store_timestamp(search_term: str):
     except Exception as e:
         logger.error(
             f"Error storing timestamp for {search_term} in database: {e}")
-        db.session.rollback()
         raise ValueError(
             f"Error storing timestamp for {search_term} in database: {e}")
     return

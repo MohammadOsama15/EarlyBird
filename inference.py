@@ -1,6 +1,6 @@
 import json
 import os
-from keras_preprocessing.text import tokenizer_from_json
+from keras.preprocessing.text import tokenizer_from_json
 from keras.utils import pad_sequences
 from keras.models import load_model
 
