@@ -3,14 +3,14 @@ from flask import Blueprint, render_template, redirect, url_for, request
 from . import cache
 from .redditAPI import get_posts
 from .inference import model, tokenize_sequence
-from .db_functions import check_presence, store_query
-from .db_functions import delete_query, fetch_results
+from .db_functions import check_timestamp, fetch_results
+from .db_functions import store_query, store_prediction
+from .db_functions import delete_predictions, delete_query
 from datetime import timedelta
 import datetime
 import logging
 
 main = Blueprint('main', __name__)
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
@@ -26,11 +26,9 @@ def index():
     return render_template("index.html")
 
 
-# log in required to view private details
 @main.route('/profile')
 @login_required
 def profile():
-    # pass firstname for greet message
     return render_template("profile.html", name=current_user.firstname)
 
 
@@ -38,31 +36,35 @@ def profile():
 @login_required
 def search():
     queried = False
-    expired = False
     query = request.args.get("searchTerm")
     if query is not None:
         queried = True
         try:
-            record_exists = check_presence(query)
-            if record_exists:
-                time = record_exists + timedelta(hours=24)
+            timestamp = check_timestamp(query)
+            if timestamp:
+                time = timestamp + timedelta(hours=24)
                 now = datetime.datetime.utcnow()
+                print(now)
                 if time < now:
-                    expired = True
                     delete_query(handle=query)
+                    delete_predictions(fk=query)
                     data = submit_query(query, cap=50)
                 else:
                     data = fetch_results(fk=query)
+                    print("fetching results")
             else:
                 data = submit_query(query, cap=50)
+                delete_query(handle=query)
+                delete_predictions(fk=query)
+                store_query(handle=query)
+                store_prediction(fk=query, predictions=data)
+                print("prediction stored")
             if data:
-                if expired:
-                    store_query(handle=query)
+                print("data has been returned")
                 return render_template("search.html", data=data)
         except Exception as e:
             logger.error(
                 f"Error querying user {current_user}: {str(e)}")
-            return render_template("error.html", message="Search error.")
     return render_template("search.html", queried=queried)
 
 
@@ -83,5 +85,4 @@ def submit_query(query: str, cap: int):
     except Exception as e:
         logger.error(
             f"Error querying user {current_user}: {str(e)}")
-        return render_template("error.html", message="Search error.")
     return
