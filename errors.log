@@ -1,0 +1,90 @@
+2023-03-23 20:19:57,743:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 00:19:57.742733')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 20:23:37,614:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 00:23:37.612701')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 20:28:14,178:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 00:28:14.177301')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 20:28:28,476:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 00:28:28.474198')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 20:49:52,757:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 00:49:52.756760')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 20:49:59,121:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 00:49:59.118720')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 20:50:03,694:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 00:50:03.691398')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 20:51:56,885:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 00:51:56.883057')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 20:52:19,682:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 00:52:19.677789')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:12:41,008:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 01:12:41.007374')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:16:30,680:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 01:16:30.678938')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:18:02,809:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 01:18:02.808227')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:20:26,021:ERROR:Error querying user <User 1>: Error deleting query essen11 from database: Class 'flask_sqlalchemy.query.Query' is not mapped
+2023-03-23 21:21:59,996:ERROR:Error querying user <User 1>: Error deleting query essen11 from database: No row was found when one was required
+2023-03-23 21:23:52,205:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 01:23:52.204870')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:24:55,948:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 01:24:55.947856')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:26:00,718:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 01:26:00.717014')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:27:11,011:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 01:27:11.009762')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:37:02,898:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 01:37:02.897859')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:38:16,984:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 01:38:16.983225')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:38:23,882:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 01:38:23.880383')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:38:29,146:ERROR:Error querying user <User 1>: Error storing query essen11 in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('essen11', '2023-03-24 01:38:29.144884')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:38:41,716:ERROR:Error querying user <User 1>: Error storing query cows in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('cows', '2023-03-24 01:38:41.715991')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2023-03-23 21:38:44,389:ERROR:Error querying user <User 1>: Error storing query cows in database: (sqlite3.IntegrityError) UNIQUE constraint failed: query.handle
+[SQL: INSERT INTO "query" (handle, time) VALUES (?, ?)]
+[parameters: ('cows', '2023-03-24 01:38:44.387928')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
