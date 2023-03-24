@@ -1,10 +1,10 @@
 from flask_login import login_required, current_user
 from flask import Blueprint, render_template, redirect, url_for, request
 from . import cache
-from .redditAPI import get_posts
-from .inference import model, tokenize_sequence
-from .db_functions import get_timestamp, store_timestamp, delete_timestamp
-from .db_functions import get_predictions, store_prediction, delete_predictions
+from redditAPI import get_posts
+from inference import model, tokenize_sequence
+from db_functions import get_timestamp, store_timestamp, delete_timestamp
+from db_functions import get_predictions, store_prediction, delete_predictions
 from datetime import timedelta
 import datetime
 import logging

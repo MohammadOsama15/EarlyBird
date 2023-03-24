@@ -1,5 +1,5 @@
 import logging
-from .models import Timestamp, Predictions
+from models import Timestamp, Predictions
 import datetime
 from . import db
 
