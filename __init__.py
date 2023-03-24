@@ -1,4 +1,3 @@
-# this module instantiates the app and ties Flask blueprints separated by functionality
 import os
 from dotenv import load_dotenv
 from flask import Flask
@@ -36,11 +35,11 @@ def create_app():
 
     # login_manager is used to keep track of user session state
     login_manager = LoginManager()
-    login_manager_login_view = 'auth.login'
+    # login_manager_login_view = 'auth.login'
     login_manager.init_app(app)
 
     # import python module used for authentication
-    from .auth import auth as auth_blueprint    
+    from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
     from .main import main as main_blueprint
