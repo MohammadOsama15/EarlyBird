@@ -3,7 +3,7 @@ import json
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from keras_preprocessing.text import tokenizer_from_json
+from keras_preprocessing.text import Tokenizer, tokenizer_from_json
 from keras_preprocessing.sequence import pad_sequences
 from keras import Sequential
 from keras.layers import Embedding, LSTM, Dense, Bidirectional
@@ -27,17 +27,17 @@ if checkpoint_path is not None:
     model = load_model("model.h5")
     with open('tokens.json') as f:
         data = json.load(f)
-        Tokenizer = tokenizer_from_json(data)
+        tokenizer = tokenizer_from_json(data)
 else:
     # max num of tokens
     vocab_size = 50000
-    Tokenizer = Tokenizer(num_words=vocab_size)
+    tokenizer = Tokenizer(num_words=vocab_size)
     # tokenize corpus
-    Tokenizer.fit_on_texts(X_train)
+    tokenizer.fit_on_texts(X_train)
     # word to num index
-    word_index = Tokenizer.word_index
+    word_index = tokenizer.word_index
     # export tokenizer
-    tokenizer_json = Tokenizer.to_json()
+    tokenizer_json = tokenizer.to_json()
     with io.open('tokenizer.json', 'w', encoding='utf-8') as f:
         f.write(json.dumps(tokenizer_json, ensure_ascii=False))
         # import GloVe file
@@ -77,8 +77,8 @@ else:
                       optimizer=Adam(), metrics=['accuracy'])
 
 # generate encoded string
-X_train_sequences = Tokenizer.texts_to_sequences(X_train)
-X_test_sequences = Tokenizer.texts_to_sequences(X_test)
+X_train_sequences = tokenizer.texts_to_sequences(X_train)
+X_test_sequences = tokenizer.texts_to_sequences(X_test)
 
 # pad or truncate sequences to achieve uniformity
 padding_type = 'post'

@@ -1,5 +1,5 @@
 import logging
-from .models import Query, Predictions
+from .models import Timestamp, Predictions
 import datetime
 from . import db
 
@@ -10,73 +10,97 @@ file_handler.setLevel(logging.INFO)
 logger.addHandler(file_handler)
 
 
-def store_query(handle: str):
+def get_timestamp(search_term: str):
     """
-    store query and timestamp into db
+    check when search term was last stored in db
     parameters:
-        handle:  a reddit handle
+        search_term:    search term
+    returns:
+        time of last query
+    """
+
+    res = Timestamp.query.filter_by(search_term=search_term).first()
+    try:
+        if res:
+            return res.time
+    except Exception as e:
+        logger.error(
+            f"Timestamp for {search_term} not found: {e}")
+    return
+
+
+def store_timestamp(search_term: str):
+    """
+    store search term and timestamp into db
+    parameters:
+        search_term:  search term
     """
     try:
-        new_entry = Query(handle=handle, time=datetime.datetime.utcnow())
-        db.session.add(new_entry)
+        stmt = Timestamp(search_term=search_term,
+                         time=datetime.datetime.utcnow())
+        db.session.add(stmt)
         db.session.commit()
     except Exception as e:
-        logger.error(f"Error storing query {handle} in database: {e}")
+        logger.error(
+            f"Error storing timestamp for {search_term} in database: {e}")
         db.session.rollback()
-        raise ValueError(f"Error storing query {handle} in database: {e}")
+        raise ValueError(
+            f"Error storing timestamp for {search_term} in database: {e}")
     return
 
 
-def delete_query(handle: str):
+def delete_timestamp(search_term: str):
     """
-    delete query and timestamp from db
+    delete search term and timestamp from db
     parameters:
-        handle:  a reddit handle
+        search_term: search term
     """
+
+    res = Timestamp.query.filter_by(search_term=search_term)
     try:
-        results = Query.query.filter_by(handle=handle)
-        if results:
-            for result in results:
-                db.session.delete(result)
+        if res:
+            for row in res:
+                db.session.delete(row)
             db.session.commit()
     except Exception as e:
-        logger.error(f"Error deleting query {handle} from database: {e}")
+        logger.error(
+            f"There are no timestamps for {search_term} to delete: {e}")
     return
 
 
-def fetch_results(fk: str):
+def get_predictions(fk: str):
     """
     retrieves corpus and predictions from db
     parameters:
-        fk:  foreign key (unique reddit handle)
+        fk:  search term
     returns:
         zip object consisting of corpus and predictions
     """
+    res = Predictions.query.filter_by(fk=fk)
     try:
-        query = Predictions.query.filter_by(fk=fk)
-        if query:
+        if res:
             corpus = []
             predictions = []
-            for row in query:
+            for row in res:
                 corpus.append(row.comment)
                 predictions.append(row.prediction)
             return zip(corpus, predictions)
     except Exception as e:
-        logger.error(f"Error fetching results for {fk} from database: {e}")
+        logger.error(f"Predictions for {fk} not found: {e}")
 
 
 def store_prediction(fk: str, predictions: zip):
     """
     stores corpus and predictions into db
     parameters:
-        fk:             foreign key (unique reddit handle)
+        fk: foreign key (search term)
         predictions:    a zipped object consisting of corpus and predictions
     """
     try:
         for comment, prediction in predictions:
-            new_entry = Predictions(
+            stmt = Predictions(
                 fk=fk, comment=comment, prediction=prediction)
-            db.session.add(new_entry)
+            db.session.add(stmt)
         db.session.commit()
     except Exception as e:
         logger.error(f"Error storing prediction for {fk} in database: {e}")
@@ -87,34 +111,16 @@ def delete_predictions(fk: str):
     """
     delete query and timestamp from db
     parameters:
-        handle:  a reddit handle
+        fk: foreign key (search term)
     """
     try:
-        records = Predictions.query.filter_by(fk=fk)
-        if records:
-            for record in records:
-                db.session.delete(record)
+        res = Predictions.query.filter_by(fk=fk)
+        if res:
+            for row in res:
+                db.session.delete(row)
             db.session.commit()
     except Exception as e:
-        logger.error(f"Error deleting query {fk} from database: {e}")
-    return
-
-
-def check_timestamp(query: str):
-    """
-    check time of last query
-    parameters:
-        query:  a reddit handle
-    returns:
-        time of last query
-    """
-    try:
-        query = Query.query.filter_by(handle=query).first()
-        if query:
-            return query.time
-    except Exception as e:
-        logger.error(
-            f"Error checking presence of query {query} in database: {e}")
+        logger.error(f"There are no predictions for {fk} to delete: {e}")
     return
 
 
