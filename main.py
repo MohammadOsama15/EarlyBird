@@ -50,15 +50,16 @@ def search():
                 if data:
                     store_timestamp(search_term=query)
                     store_prediction(fk=query, predictions=data)
+                    return render_template("search.html", data=data)
             else:
                 data = predictions_from_db
+                return render_template("search.html", data=data)
         else:
             data = submit_query(query, cap=50)
             if data:
                 store_timestamp(search_term=query)
                 store_prediction(fk=query, predictions=data)
-        if data:
-            return render_template("search.html", data=data)
+                return render_template("search.html", data=data)
     return render_template("search.html", queried=queried)
 
 
