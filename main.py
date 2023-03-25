@@ -35,40 +35,33 @@ def profile():
 @login_required
 def search():
     queried = False
+    data = None
+    case = None
     query = request.args.get("searchTerm")
     if query:
-        print("query is not none")
         queried = True
         timestamp_from_db = get_timestamp(search_term=query)
-        print(timestamp_from_db)
         predictions_from_db = get_predictions(fk=query)
-        if timestamp_from_db and predictions_from_db:
-            print("timestamp and predictions from db present")
-            time = timestamp_from_db + timedelta(hours=24)
-            now = datetime.datetime.utcnow()
-            if time < now:
-                print("record is expired")
+        if not timestamp_from_db and predictions_from_db:
+            case = "not_in_db"
+        elif (timestamp_from_db + timedelta(hours=24)) < datetime.datetime.utcnow():
+            case = "valid"
+        else:
+            case = "expired"
+        match case:
+            case "not_in_db":
+                data = submit_query(query, cap=50)
+            case "expired":
                 delete_timestamp(search_term=query)
                 delete_predictions(fk=query)
                 data = submit_query(query, cap=50)
-                if data:
-                    print("data is not none")
-                    store_timestamp(search_term=query)
-                    store_prediction(fk=query, predictions=data)
-                    return render_template("search.html", data=data)
-            else:
+            case "valid":
                 data = predictions_from_db
-                print("data is from db")
-                return render_template("search.html", data=data)
-        else:
-            print("grabbing data from reddit")
-            data = submit_query(query, cap=50)
-            if data:
-                store_timestamp(search_term=query)
-                store_prediction(fk=query, predictions=data)
-                return render_template("search.html", data=data)
-    print("reached no result display")
-    return render_template("search.html", queried=queried)
+    template = render_template("search.html", data=data, queried=queried)
+    if case == "not_in_db" or case == "expired":
+        store_prediction(fk=query, predictions=data)
+        store_timestamp(search_term=query)
+    return template
 
 
 @main.route('/information')

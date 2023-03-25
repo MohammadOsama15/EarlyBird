@@ -54,7 +54,6 @@ def delete_timestamp(search_term: str):
     parameters:
         search_term: search term
     """
-
     res = Timestamp.query.filter_by(search_term=search_term)
     try:
         if res:
