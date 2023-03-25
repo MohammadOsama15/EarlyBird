@@ -41,13 +41,18 @@ def search():
     if query:
         queried = True
         timestamp_from_db = get_timestamp(search_term=query)
+        print(timestamp_from_db and 0)
         predictions_from_db = get_predictions(fk=query)
-        if not timestamp_from_db and predictions_from_db:
+        print(predictions_from_db and 0)
+        if not timestamp_from_db or predictions_from_db:
+            print("not in db")
             case = "not_in_db"
         elif (timestamp_from_db + timedelta(hours=24)) < datetime.datetime.utcnow():
-            case = "valid"
-        else:
             case = "expired"
+            print("expired")
+        else:
+            case = "valid"
+        print(case)
         match case:
             case "not_in_db":
                 data = submit_query(query, cap=50)
@@ -59,8 +64,8 @@ def search():
                 data = predictions_from_db
     template = render_template("search.html", data=data, queried=queried)
     if case == "not_in_db" or case == "expired":
-        store_prediction(fk=query, predictions=data)
         store_timestamp(search_term=query)
+        store_prediction(fk=query, predictions=data)
     return template
 
 
