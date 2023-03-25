@@ -1,10 +1,18 @@
 from flask_login import login_required, current_user
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint
+from flask import render_template
+from flask import redirect
+from flask import url_for
+from flask import request
 from . import cache
 from .redditAPI import get_posts
 from .inference import model, tokenize_sequence
-from .db_functions import get_timestamp, store_timestamp, delete_timestamp
-from .db_functions import get_predictions, store_prediction, delete_predictions
+from .db_functions import get_timestamp
+from .db_functions import store_timestamp
+from .db_functions import delete_timestamp
+from .db_functions import get_predictions
+from .db_functions import store_prediction
+from .db_functions import delete_predictions
 from datetime import timedelta
 import datetime
 import logging
@@ -34,9 +42,7 @@ def profile():
 @main.route('/search')
 @login_required
 def search():
-    queried = False
-    data = None
-    is_in_db = "no"
+    queried, data, is_in_db = False, None, "no"
     query = request.args.get("searchTerm")
     if query:
         queried = True
@@ -44,11 +50,9 @@ def search():
         predictions_from_db = get_predictions(fk=query)
         if timestamp_from_db and predictions_from_db:
             is_in_db = "yes"
-            print("valid")
-            if (timestamp_from_db + timedelta(hours=24)) < datetime.datetime.utcnow():
+            now = datetime.datetime.utcnow()
+            if (timestamp_from_db + timedelta(hours=24)) < now:
                 is_in_db = "expired"
-                print("expired")
-        print(is_in_db)
     match is_in_db:
         case "no":
             data = submit_query(query, cap=50)
@@ -58,16 +62,10 @@ def search():
             delete_predictions(fk=query)
         case "yes":
             data = predictions_from_db
-    for i, j in data:
-        print(i, j)
     if data:
         if is_in_db != "yes":
             store_timestamp(search_term=query)
             store_prediction(fk=query, predictions=data)
-    print(datetime.datetime.utcnow(),
-          ": just before returning from render_template")
-    for i, j in data:
-        print(i, j)
     return render_template("search.html", data=data, queried=queried)
 
 
@@ -84,9 +82,6 @@ def submit_query(query: str, cap: int):
             tokenized_sequence = tokenize_sequence(results)
             predictions = model.predict(tokenized_sequence)
             data = zip(results, predictions)
-            # for i, j in data:
-            #print("this is from submit_query", i, j)
-            print(type(data))
             return list(data)
         return
     except Exception as e:
