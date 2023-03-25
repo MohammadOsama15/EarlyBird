@@ -46,6 +46,7 @@ def store_timestamp(search_term: str):
             f"Error storing timestamp for {search_term} in database: {e}")
         raise ValueError(
             f"Error storing timestamp for {search_term} in database: {e}")
+    print(datetime.datetime.utcnow(), ": just before returning store_timestamp")
     return
 
 
@@ -106,6 +107,7 @@ def store_prediction(fk: str, predictions: zip):
     except Exception as e:
         logger.error(f"Error storing prediction for {fk} in database: {e}")
         raise ValueError({e})
+    print(datetime.datetime.utcnow(), ": just before returning store_prediction")
     return
 
 

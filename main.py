@@ -36,34 +36,38 @@ def profile():
 def search():
     queried = False
     data = None
-    case = None
+    is_in_db = "no"
     query = request.args.get("searchTerm")
     if query:
         queried = True
         timestamp_from_db = get_timestamp(search_term=query)
         predictions_from_db = get_predictions(fk=query)
-        if not timestamp_from_db or predictions_from_db:
-            case = "not_in_db"
-            print("not in db")
-        elif (timestamp_from_db + timedelta(hours=24)) < datetime.datetime.utcnow():
-            case = "expired"
-            print("expired")
-        else:
-            case = "valid"
+        if timestamp_from_db and predictions_from_db:
+            is_in_db = "yes"
             print("valid")
-        print(case)
-        match case:
-            case "not_in_db":
-                data = submit_query(query, cap=50)
-            case "expired":
-                data = submit_query(query, cap=50)
-            case "valid":
-                data = predictions_from_db
-    if case == "not_in_db" or case == "expired":
-        delete_timestamp(search_term=query)
-        delete_predictions(fk=query)
-        store_timestamp(search_term=query)
-        store_prediction(fk=query, predictions=data)
+            if (timestamp_from_db + timedelta(hours=24)) < datetime.datetime.utcnow():
+                is_in_db = "expired"
+                print("expired")
+        print(is_in_db)
+    match is_in_db:
+        case "no":
+            data = submit_query(query, cap=50)
+        case "expired":
+            data = submit_query(query, cap=50)
+            delete_timestamp(search_term=query)
+            delete_predictions(fk=query)
+        case "yes":
+            data = predictions_from_db
+    for i, j in data:
+        print(i, j)
+    if data:
+        if is_in_db != "yes":
+            store_timestamp(search_term=query)
+            store_prediction(fk=query, predictions=data)
+    print(datetime.datetime.utcnow(),
+          ": just before returning from render_template")
+    for i, j in data:
+        print(i, j)
     return render_template("search.html", data=data, queried=queried)
 
 
@@ -80,7 +84,10 @@ def submit_query(query: str, cap: int):
             tokenized_sequence = tokenize_sequence(results)
             predictions = model.predict(tokenized_sequence)
             data = zip(results, predictions)
-            return data
+            # for i, j in data:
+            #print("this is from submit_query", i, j)
+            print(type(data))
+            return list(data)
         return
     except Exception as e:
         logger.error(
