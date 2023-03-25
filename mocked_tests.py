@@ -81,6 +81,5 @@ class TestGetPosts(unittest.TestCase):
         self.assertIn("Test title", result)
         self.assertIn("Another test title", result)
 
-
 if __name__ == '__main__':
     unittest.main()

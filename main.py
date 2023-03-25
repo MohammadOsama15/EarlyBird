@@ -1,10 +1,18 @@
 from flask_login import login_required, current_user
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint
+from flask import render_template
+from flask import redirect
+from flask import url_for
+from flask import request
 from . import cache
 from .redditAPI import get_posts
 from .inference import model, tokenize_sequence
-from .db_functions import get_timestamp, store_timestamp, delete_timestamp
-from .db_functions import get_predictions, store_prediction, delete_predictions
+from .db_functions import get_timestamp
+from .db_functions import store_timestamp
+from .db_functions import delete_timestamp
+from .db_functions import get_predictions
+from .db_functions import store_prediction
+from .db_functions import delete_predictions
 from datetime import timedelta
 import datetime
 import logging
@@ -34,41 +42,31 @@ def profile():
 @main.route('/search')
 @login_required
 def search():
-    queried = False
+    queried, data, is_in_db = False, None, "no"
     query = request.args.get("searchTerm")
     if query:
-        print("query is not none")
         queried = True
         timestamp_from_db = get_timestamp(search_term=query)
-        print(timestamp_from_db)
         predictions_from_db = get_predictions(fk=query)
         if timestamp_from_db and predictions_from_db:
-            print("timestamp and predictions from db present")
-            time = timestamp_from_db + timedelta(hours=24)
+            is_in_db = "yes"
             now = datetime.datetime.utcnow()
-            if time < now:
-                print("record is expired")
-                delete_timestamp(search_term=query)
-                delete_predictions(fk=query)
-                data = submit_query(query, cap=50)
-                if data:
-                    print("data is not none")
-                    store_timestamp(search_term=query)
-                    store_prediction(fk=query, predictions=data)
-                    return render_template("search.html", data=data)
-            else:
-                data = predictions_from_db
-                print("data is from db")
-                return render_template("search.html", data=data)
-        else:
-            print("grabbing data from reddit")
+            if (timestamp_from_db + timedelta(hours=24)) < now:
+                is_in_db = "expired"
+    match is_in_db:
+        case "no":
             data = submit_query(query, cap=50)
-            if data:
-                store_timestamp(search_term=query)
-                store_prediction(fk=query, predictions=data)
-                return render_template("search.html", data=data)
-    print("reached no result display")
-    return render_template("search.html", queried=queried)
+        case "expired":
+            data = submit_query(query, cap=50)
+            delete_timestamp(search_term=query)
+            delete_predictions(fk=query)
+        case "yes":
+            data = predictions_from_db
+    if data:
+        if is_in_db != "yes":
+            store_timestamp(search_term=query)
+            store_prediction(fk=query, predictions=data)
+    return render_template("search.html", data=data, queried=queried)
 
 
 @main.route('/information')
@@ -84,7 +82,7 @@ def submit_query(query: str, cap: int):
             tokenized_sequence = tokenize_sequence(results)
             predictions = model.predict(tokenized_sequence)
             data = zip(results, predictions)
-            return data
+            return list(data)
         return
     except Exception as e:
         logger.error(

@@ -40,6 +40,7 @@ def store_timestamp(search_term: str):
                          time=datetime.datetime.utcnow())
         db.session.add(stmt)
         db.session.commit()
+        db.session.close()
     except Exception as e:
         logger.error(
             f"Error storing timestamp for {search_term} in database: {e}")
@@ -54,13 +55,13 @@ def delete_timestamp(search_term: str):
     parameters:
         search_term: search term
     """
-
     res = Timestamp.query.filter_by(search_term=search_term)
     try:
         if res:
             for row in res:
                 db.session.delete(row)
             db.session.commit()
+            db.session.close()
     except Exception as e:
         logger.error(
             f"There are no timestamps for {search_term} to delete: {e}")
@@ -101,8 +102,10 @@ def store_prediction(fk: str, predictions: zip):
                 fk=fk, comment=comment, prediction=prediction)
             db.session.add(stmt)
         db.session.commit()
+        db.session.close()
     except Exception as e:
         logger.error(f"Error storing prediction for {fk} in database: {e}")
+        raise ValueError({e})
     return
 
 
@@ -118,6 +121,7 @@ def delete_predictions(fk: str):
             for row in res:
                 db.session.delete(row)
             db.session.commit()
+            db.session.close()
     except Exception as e:
         logger.error(f"There are no predictions for {fk} to delete: {e}")
     return
