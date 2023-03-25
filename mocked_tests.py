@@ -37,25 +37,29 @@ class TestGetAccessToken(unittest.TestCase):
         mock_response.raise_for_status.assert_called_once()
         mock_response.json.assert_called_once()
 
+
 class TestGetPosts(unittest.TestCase):
 
-     @patch("redditAPI.requests.get")
-     @patch("redditAPI.get_access_token")
-     def test_get_posts_access_token_none(self, mock_get_access_token, mock_requests_get):
-         mock_get_access_token.return_value = None
-         result = get_posts("query")
-         self.assertIsNone(result)
+    @patch("redditAPI.requests.get")
+    @patch("redditAPI.get_access_token")
+    def test_get_posts_access_token_none(self,
+                                         mock_get_access_token,
+                                         mock_requests_get):
+        mock_get_access_token.return_value = None
+        result = get_posts("query")
+        self.assertIsNone(result)
 
-     @patch("redditAPI.time.sleep")
-     @patch("redditAPI.requests.get")
-     @patch("redditAPI.get_access_token")
-     
-     def test_get_posts_success(self, mock_get_access_token, mock_requests_get, mock_time_sleep):
+    @patch("redditAPI.time.sleep")
+    @patch("redditAPI.requests.get")
+    @patch("redditAPI.get_access_token")
+    def test_get_posts_success(self, mock_get_access_token,
+                               mock_requests_get,
+                               mock_time_sleep):
         mock_get_access_token.return_value = "access_token"
-        
+
         mock_user_info_response = MagicMock(raise_for_status=lambda: None)
         mock_user_info_response.json.return_value = {"data": "some_data"}
-        
+
         mock_posts_response = MagicMock(raise_for_status=lambda: None)
         mock_posts_response.json.return_value = {
             "data": {
@@ -66,7 +70,7 @@ class TestGetPosts(unittest.TestCase):
                 "after": None
             }
         }
-        
+
         mock_requests_get.side_effect = [
             mock_user_info_response,
             mock_posts_response,
