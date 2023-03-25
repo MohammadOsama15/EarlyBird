@@ -1,6 +1,7 @@
 /* Creating a color theme for the app so if you want to change one color in the code, you can just change here it will autmoatically change in other places */
 :root {
-  --primary-color: #1A1A1B;
+
+  --primary-color: #1A1A1B; 
   --secondary-color: #212121;
   --tertiary-color: #3E3E3F;
   --text-color: #D9D9D9;
@@ -76,11 +77,11 @@ button:hover, .btn:hover {
   color: var(--text-color);
   /* border-color: var(--tertiary-color); */
 }
-input[type="text"], input[type="search"] {
+/* input[type="text"], input[type="search"] {
   background-color: var(--secondary-color);
   color: var(--text-color);
   /* border-color: var(--tertiary-color); */
-}
+
 /* This is for the input box taking grey color */
 input[type="text"]:focus, input[type="search"]:focus {
   /* border-color: var(--accent-color); */
