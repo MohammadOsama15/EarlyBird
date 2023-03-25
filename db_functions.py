@@ -90,7 +90,6 @@ def get_predictions(fk: str):
 
 
 def store_prediction(fk: str, predictions: zip):
-    print("attempting to store pred")
     """
     stores corpus and predictions into db
     parameters:
