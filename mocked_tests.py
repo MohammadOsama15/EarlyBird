@@ -57,29 +57,37 @@ class TestGetPosts(unittest.TestCase):
                                mock_time_sleep):
         mock_get_access_token.return_value = "access_token"
 
-        mock_user_info_response = MagicMock(raise_for_status=lambda: None)
-        mock_user_info_response.json.return_value = {"data": "some_data"}
-
         mock_posts_response = MagicMock(raise_for_status=lambda: None)
         mock_posts_response.json.return_value = {
             "data": {
                 "children": [
-                    {"data": {"title": "Test title"}},
-                    {"data": {"title": "Another test title"}},
+                    {
+                        "data": {
+                            "title": "Test title",
+                            "permalink": "/r/test/comments/1a2b3c/test_title/"
+                        }
+                    },
+                    {
+                        "data": {
+                            "title": "Another test title",
+                            "permalink": "/r/test/comments/4d5e6f/another_test_title/"
+                        }
+                    },
                 ],
                 "after": None
             }
         }
 
-        mock_requests_get.side_effect = [
-            mock_user_info_response,
-            mock_posts_response,
-        ]
+        mock_requests_get.return_value = mock_posts_response
 
         result = get_posts("query", cap=2)
-        self.assertEqual(len(result), 2)
-        self.assertIn("Test title", result)
-        self.assertIn("Another test title", result)
+        self.assertIsNotNone(result)
+        self.assertEqual(len(result[0]), 2)
+        self.assertIn("Test title", result[0])
+        self.assertIn("Another test title", result[0])
+        self.assertEqual(len(result[1]), 2)
+        self.assertIn("/r/test/comments/1a2b3c/test_title/", result[1])
+        self.assertIn("/r/test/comments/4d5e6f/another_test_title/", result[1])
 
 if __name__ == '__main__':
     unittest.main()
