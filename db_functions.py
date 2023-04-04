@@ -84,7 +84,7 @@ def get_titles(fk: int):
             permalinks = []
             id = []
             for row in res:
-                corpus.append(row.comment)
+                corpus.append(row.title)
                 predictions.append(row.prediction)
                 permalinks.append(row.permalink)
                 id.append(row.id)

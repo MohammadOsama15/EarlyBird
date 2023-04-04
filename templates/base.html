@@ -1,120 +1,130 @@
 <!DOCTYPE html>
 {% block header %}
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Earlybird Sentiment Analyzer</title>
 
-    <!-- link bootstrap from cdn -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <!-- link to custom css -->
-    <link href="{{url_for('static', filename='main.css')}}" rel="stylesheet">
-    <!-- link to the font awesome cdn feature for the app -->    
-    <script src="https://kit.fontawesome.com/0504b26dfb.js" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Earlybird Sentiment Analyzer</title>
 
-  {% endblock %} 
-  
+  <!-- link bootstrap from cdn -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <!-- link to custom css -->
+  <link href="{{url_for('static', filename='main.css')}}" rel="stylesheet">
+  <!-- link to the font awesome cdn feature for the app -->
+  <script src="https://kit.fontawesome.com/0504b26dfb.js" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+
+  {% endblock %}
+
   {% block body %}
-  <body>
-    <!-- container-fluid spans entire viewport width -->
-    <section class="container-fluid">
-      <div class="row">
-        <section class="container-fluid">
-          <div class="row">
-            <nav class="navbar navbar-expand-lg">
-              <div class="container-fluid">
-                {% if request.endpoint == 'main.comments' %}
-                  <button id="back-button" class="btn btn-link text-dark" onclick="window.history.back();">
-                    <i class="bi bi-arrow-left"></i>
-                  </button>
-                {% endif %}
-                <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                {% if not current_user.is_authenticated %}
-                <a class="nav-link text-dark" href="{{ url_for('main.index') }}">
-                  <i class="bi bi-house-door-fill"></i>
-                  Home
-                </a>
-              </li> 
-              {% endif %}      
-              {% if current_user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link text-dark" href="{{ url_for('main.search') }}">
-                  <i class="bi bi-search"></i>
-                  Search
-                </a>
-              </li>
-              {% endif %}              
-              {% if current_user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link text-dark" href="{{ url_for('main.profile') }}">
-                  <i class="bi bi-person"></i>
-                  Profile
-                </a>
-              </li>
-              {% endif %}
-              {% if not current_user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link text-dark" href="{{ url_for('auth.login') }}">
-                  <i class="bi bi-box-arrow-in-right"></i>
-                  Login
-                </a>
-              </li>
-              {% endif %}
-              {% if not current_user.is_authenticated %}
-              <li>
-                <a class="nav-link text-dark" href="{{ url_for('auth.signup') }}">
-                  <i class="bi bi-person-plus-fill"></i>
-                  Sign Up
-                </a>
-              </li>
-              {% endif %}
-              {% if current_user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link text-dark" href="{{ url_for('auth.logout') }}">
-                  <i class="bi bi-box-arrow-right"></i>
-                  Logout
-                </a>
-              </li>
-              {% endif %}
-            </ul>
-          </div>
-        </nav>        
-      </div>
-    <div class="container vertical-center">
-      <div class="text-center">
-      
-      {% block content %} 
-      {% endblock %}
-      
-      </div>
-    </div>
-    </section>
 
-    <!-- link to Bootstrap js dependencies -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script>
-      function togglePasswordVisibility(password) {
-        var passwordInput = document.getElementById(password);
-        var toggleIcon = document.querySelector(".password-toggle-icon i");
-      
-        if (passwordInput.type === "password") {
-          passwordInput.type = "text";
-          toggleIcon.classList.remove("fa-eye");
-          toggleIcon.classList.add("fa-eye-slash");
-        } else {
-          passwordInput.type = "password";
-          toggleIcon.classList.remove("fa-eye-slash");
-          toggleIcon.classList.add("fa-eye");
+<body>
+  <!-- container-fluid spans entire viewport width -->
+  <section class="container-fluid">
+    <div class="row">
+      <section class="container-fluid">
+        <div class="row">
+          <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+              {% if request.endpoint == 'main.comments' %}
+              <button id="back-button" class="btn btn-link text-dark" onclick="window.history.back();">
+                <i class="bi bi-arrow-left"></i>
+              </button>
+              {% endif %}
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                  {% if not current_user.is_authenticated %}
+                  <a class="nav-link text-dark" href="{{ url_for('main.index') }}">
+                    <i class="bi bi-house-door-fill"></i>
+                    Home
+                  </a>
+                </li>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link text-dark" href="{{ url_for('main.search') }}">
+                    <i class="bi bi-search"></i>
+                    Search
+                  </a>
+                </li>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link text-dark" href="{{ url_for('main.profile') }}">
+                    <i class="bi bi-person"></i>
+                    Profile
+                  </a>
+                </li>
+                {% endif %}
+                {% if not current_user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link text-dark" href="{{ url_for('auth.login') }}">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Login
+                  </a>
+                </li>
+                {% endif %}
+                {% if not current_user.is_authenticated %}
+                <li>
+                  <a class="nav-link text-dark" href="{{ url_for('auth.signup') }}">
+                    <i class="bi bi-person-plus-fill"></i>
+                    Sign Up
+                  </a>
+                </li>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link text-dark" href="{{ url_for('auth.logout') }}">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Logout
+                  </a>
+                </li>
+                {% endif %}
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="container vertical-center">
+          <div class="text-center">
+
+            {% block content %}
+            {% endblock %}
+
+          </div>
+        </div>
+      </section>
+
+      <!-- link to Bootstrap js dependencies -->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+      <script>
+        function togglePasswordVisibility(password) {
+          var passwordInput = document.getElementById(password);
+          var toggleIcon = document.querySelector(".password-toggle-icon i");
+
+          if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+          } else {
+            passwordInput.type = "password";
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+          }
         }
-      }
-    </script>
-    </body>
-    {% endblock %} 
-    {% block footer %} 
-    {% endblock %}
-  </html>
+      </script>
+</body>
+{% endblock %}
+{% block footer %}
+{% endblock %}
+
+</html>
