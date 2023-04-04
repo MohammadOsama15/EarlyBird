@@ -49,6 +49,15 @@ body {
   padding: 10px;
   color: white !important;
 }
+.back-btn {
+  color: #343a40;
+  text-decoration: none;
+}
+
+.back-btn:hover {
+  color: #343a40;
+  text-decoration: none;
+}
 /* Creating all the below for when we add the following to stick to the theme */
 /* Header theme */
 #header {

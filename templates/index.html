@@ -1,47 +1,42 @@
 {% extends "base.html" %}
 
-{% block content %} 
-{% set background_url = url_for('static', filename='background.webp') %}
+{% block content %}
+{% set background_url = url_for('static', filename='jumbotron.png') %}
 
 <style>
-  .p-5 {
-    position: relative;
-    height: 90vh;
-    width: 90vw;
-    margin: 0 auto;
+  .jumbotron-fluid {
     background-image: url({{ background_url }});
     background-size: cover;
+    background-position: center;
+    color: white;
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
-  .mask {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateY(-50%) translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.8);
-    width: 75%;
-    height: 75%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .container {
+    padding-top: 1rem;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .content-card {
+    background-color: #303030;
+    padding: 2rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color:whitesmoke
   }
 </style>
-
-<div class="p-5 text-center bg-image rounded-3" style="
-    background-image: url({{ background_url }});
-    height: 90vh;
-    width: 90vw;
-    background-size: cover;
-  ">
-  <div class="mask" style="background-color: rgba(0, 0, 0, 0.7);">
-    <div class="d-flex justify-content-center align-items-center h-100">
-      <div class="text-white">
-        <h1 class="mb-3 text-center text-justify">Unlock the Emotions Behind Reddit Posts</h1>
-        <h4 class="mb-3  text-center text-justify"> Understand the sentiment of Reddit with our powerful analyzer</h4>
-        <p>Join the conversation on Reddit with confidence. Our sentiment analyzer offers powerful insights into the emotions behind post titles, so you can engage with the community in a more meaningful way. Whether you're tracking trends or exploring new topics, our tool offers accurate and real-time analysis of the sentiment on Reddit.</p>
-        <a class="btn btn-outline-light btn-lg" href="{{ url_for('auth.signup') }}" role="button">Join the conversation on Reddit with confidence. Sign up now and start exploring the emotions behind the posts.</a>
-      </div>
+<div class="jumbotron jumbotron-fluid">
+</div>
+<div class="container">
+  <div class="content-card">
+    <h1 class="mb-3 text-center">Sign up and Get Started</h1>
+    <h4 class="mb-3 text-center">Unlock the Emotions Behind Reddit Posts</h4>
+    <p>Join the conversation on Reddit with confidence. Our sentiment analyzer offers powerful insights into the emotions behind post titles, so you can engage with the community in a more meaningful way. Whether you're tracking trends or exploring new topics, our tool offers accurate and real-time analysis of the sentiment on Reddit.</p>
+    <div class="text-center">
+      <a class="btn btn-outline-primary btn-lg" href="{{ url_for('auth.signup') }}" role="button">Sign up!</a>
     </div>
   </div>
 </div>
-
 {% endblock %}
