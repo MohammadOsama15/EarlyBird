@@ -19,9 +19,6 @@ def get_access_token():
     SECRET_KEY = os.getenv("SECRET_KEY")
     username = os.getenv("username")
     password = os.getenv("password")
-    print(username)
-    print(password)
-
     auth = requests.auth.HTTPBasicAuth(CLIENT_ID, SECRET_KEY)
     data = {
         'grant_type': 'password',
@@ -33,7 +30,6 @@ def get_access_token():
     try:
         res = requests.post('https://www.reddit.com/api/v1/access_token',
                             auth=auth, data=data, headers=headers)
-        print(res.json())
         res.raise_for_status()
     except requests.exceptions.HTTPError as e:
         print(f"Error getting access token: {e}")
@@ -161,7 +157,6 @@ def get_comments(permalink):
 
     try:
         res = requests.get(base_url + permalink, headers=headers)
-        print(permalink)
         res.raise_for_status()
     except requests.exceptions.HTTPError as e:
         print(f"Error getting comments: {e}")

@@ -68,18 +68,14 @@ def search():
     if query:
         queried = True
         exists_timestamp = get_timestamp(search_term=query)
-        print("1")
         if exists_timestamp:
             timestamp_from_db, stored_query_id = exists_timestamp
             titles_from_db = get_titles(stored_query_id)
-            print("2")
             if timestamp_from_db and titles_from_db:
                 is_in_db = "yes"
                 now = datetime.datetime.utcnow()
-                print("3")
                 if (timestamp_from_db + timedelta(hours=24)) < now:
                     is_in_db = "expired"
-                    print("4")
     match is_in_db:
         case "no":
             data = submit_query(query, cap=CAP)
