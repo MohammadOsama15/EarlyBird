@@ -2,12 +2,21 @@
 {% block content %}
   <div class="container">
     <h1>Comments</h1>
-    <ul>
-      {% for comment in comments %}
-        <li>{{ comment }}</li>
-      {% else %}
-        <li>No comments found</li>
-      {% endfor %}
-    </ul>
+    <div class="col-sm-12 col-md-10 col-lg-8 mx-auto" style="padding: 20px;">
+      <ul class="list-group">
+        {% for comment in comments %}
+          {% if comment != "[deleted]" %}
+            <li class="list-group-item">{{ comment }}</li>
+          {% endif %}
+        {% else %}
+          <li class="list-group-item">No comments found</li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
+  <style>
+    .container{
+      padding-top: 20px;
+    }
+  </style>
 {% endblock %}
