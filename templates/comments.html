@@ -1,20 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-
-  <ol class="list-group col-sm-12 col-md-10 col-lg-8 mx-auto">
-    {% if data %}
-    {% for item in data %}
-    {% if item['prediction']|float < 0.5 %} <li class="list-group-item list-group-item-danger">
-      {{ item['comment'] }} {{ item['prediction'] }}</li>
-      {% else %}
-      <li class="list-group-item list-group-item-success">
-        {{ item['comment'] }} {{ item['prediction'] }}</li>
+  <h1>Comments</h1>
+  <div class="col-sm-12 col-md-10 col-lg-8 mx-auto" style="padding: 20px;">
+    <ul class="list-group">
+      {% if data %}
+      {% for item in data %}
+      {% if item['comment'] != "[deleted]" %}
+      <li class="list-group-item">{{ item['comment'] }} {{ item['prediction'] }}</li>
       {% endif %}
+      {% else %}
+      <li class="list-group-item">No comments found</li>
       {% endfor %}
-      {% else %}
-      <li>No comments found</li>
       {% endif %}
-  </ol>
+    </ul>
+  </div>
 </div>
+<style>
+  .container {
+    padding-top: 20px;
+  }
+</style>
 {% endblock %}

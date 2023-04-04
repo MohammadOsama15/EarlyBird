@@ -15,25 +15,33 @@
   </div>
   {% if data %}
   <div class="container col-lg-12">
-    <ol class="list-group col-sm-12 col-md-10 col-lg-8 mx-auto">
-      {% for item in data %}
-      {% if item['prediction']|float < 0.5 %} <li class="list-group-item list-group-item-danger">
-        <a href="{{ url_for('main.comments', permalink=item['permalink'][1:])}}">{{ item['title']
-          }}</a>
-        {{ item['prediction'] }} <i class="fas fa-frown"></i>
-        </li>
-        {% else %}
-        <li class="list-group-item list-group-item-success">
-          <a href="{{ url_for('main.comments', permalink=item['permalink'][1:]) }}">{{
-            item['title'] }}</a>
-          {{ item['prediction'] }} <i class="fas fa-grin"></i>
-        </li>
-        {% endif %}
-        {% endfor %}
-
-    </ol>
-  </div>
-  </ol>
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="text-center">Negative</h2>
+        <ol class="list-group">
+          {% for item in data %}
+          {% if item['prediction']|float < 0.5 %} <li class="list-group-item list-group-item-danger">
+            <a href="{{ url_for('main.comments', permalink=item['permalink'][1:]) }}">{{ item['title'] }}</a>
+            {{ item['prediction'] }} <i class="fas fa-frown"></i>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ol>
+      </div>
+      <div class="col-md-6">
+        <h2 class="text-center">Positive</h2>
+        <ol class="list-group">
+          {% for item in data %}
+          {% if item['prediction']|float >= 0.5 %}
+          <li class="list-group-item list-group-item-success">
+            <a href="{{ url_for('main.comments', permalink=item['permalink'][1:]) }}">{{ item['title'] }}</a>
+            {{ item['prediction'] }} <i class="fas fa-grin"></i>
+          </li>
+          {% endif %}
+          {% endfor %}
+        </ol>
+      </div>
+    </div>
   </div>
   {% elif queried %}
   <script>
