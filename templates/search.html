@@ -1,51 +1,54 @@
 {% extends "base.html" %}
 {% block content %}
-  <form method="GET" action="/search">
-    <div class="form-group col-sm-12 col-md-10 col-lg-8 mx-auto mb-3">
-      <div class="search-image mt-3"><img src="../static/reddit_logo_1.png" style="max-width: 150px; max-height: 150px;"></div> 
-      <div class="input-group my-3">
-        <input type="search" class="form-control" name="searchTerm" placeholder="Search Reddit" id="searchbox">
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="submit">
-            <span class="fa fa-search"></span>
-          </button>
-        </div>
+<form method="GET" action="/search">
+  <div class="form-group col-sm-12 col-md-10 col-lg-8 mx-auto mb-3">
+    <div class="search-image mt-3"><img src="../static/reddit_logo_1.png" style="max-width: 150px; max-height: 150px;">
+    </div>
+    <div class="input-group my-3">
+      <input type="search" class="form-control" name="searchTerm" placeholder="Search Reddit" id="searchbox">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="submit">
+          <span class="fa fa-search"></span>
+        </button>
       </div>
     </div>
-    {% if data %}
-    <div class="container col-lg-12">
-      <ol class="list-group col-sm-12 col-md-10 col-lg-8 mx-auto">
-        {% for item in data %}
-        {% if item['prediction']|float < 0.5 %}
-          <li class="list-group-item list-group-item-danger">
-            <a href="{{ url_for('main.comments', permalink=item['permalink'][1:]) }}">{{ item['title'] }}</a>
-            {{ item['prediction'] }} <i class="fas fa-frown"></i>
-          </li>
+  </div>
+  {% if data %}
+  <div class="container col-lg-12">
+    <ol class="list-group col-sm-12 col-md-10 col-lg-8 mx-auto">
+      {% for item in data %}
+      {% if item['prediction']|float < 0.5 %} <li class="list-group-item list-group-item-danger">
+        <a href="{{ url_for('main.comments', permalink=item['permalink'][1:])}}">{{ item['title']
+          }}</a>
+        {{ item['prediction'] }} <i class="fas fa-frown"></i>
+        </li>
         {% else %}
-          <li class="list-group-item list-group-item-success">
-            <a href="{{ url_for('main.comments', permalink=item['permalink'][1:]) }}">{{ item['title'] }}</a>
-            {{ item['prediction'] }}  <i class="fas fa-grin"></i>
-          </li>
+        <li class="list-group-item list-group-item-success">
+          <a href="{{ url_for('main.comments', permalink=item['permalink'][1:]) }}">{{
+            item['title'] }}</a>
+          {{ item['prediction'] }} <i class="fas fa-grin"></i>
+        </li>
         {% endif %}
-      {% endfor %}
-      
-      </ol>
-    </div>
-      </ol>
-    </div>
+        {% endfor %}
+
+    </ol>
+  </div>
+  </ol>
+  </div>
   {% elif queried %}
-    <script>
-      document.getElementsByName('searchTerm')[0].placeholder='No results found, please try another Reddit username.';
-    </script>
+  <script>
+    document.getElementsByName('searchTerm')[0].placeholder = 'No results found, please try another Reddit username.';
+  </script>
   {% endif %}
   <style>
-    .btn{
-      background-color:rgb(80, 80, 80);
+    .btn {
+      background-color: rgb(80, 80, 80);
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
     }
-    #searchbox{
-      background-color:rgb(255,255,255);
+
+    #searchbox {
+      background-color: rgb(255, 255, 255);
     }
   </style>
-{% endblock %}
+  {% endblock %}

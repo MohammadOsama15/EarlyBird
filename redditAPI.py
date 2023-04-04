@@ -6,6 +6,8 @@ import time
 import unicodedata
 
 load_dotenv()
+
+
 def get_access_token():
     """
     Retrieves the access token from the Reddit API.
@@ -17,6 +19,8 @@ def get_access_token():
     SECRET_KEY = os.getenv("SECRET_KEY")
     username = os.getenv("username")
     password = os.getenv("password")
+    print(username)
+    print(password)
 
     auth = requests.auth.HTTPBasicAuth(CLIENT_ID, SECRET_KEY)
     data = {
@@ -25,10 +29,11 @@ def get_access_token():
         'password': password
     }
 
-    headers = {'User-Agent': 'MyAPI/0.0.1'}
+    headers = {'User-Agent': 'earlybird'}
     try:
         res = requests.post('https://www.reddit.com/api/v1/access_token',
                             auth=auth, data=data, headers=headers)
+        print(res.json())
         res.raise_for_status()
     except requests.exceptions.HTTPError as e:
         print(f"Error getting access token: {e}")
@@ -62,6 +67,7 @@ def clean_title(title):
     # Remove extra whitespaces
     title = ' '.join(title.split())
     return title
+
 
 def get_posts(query, cap=None):
     """
@@ -115,7 +121,7 @@ def get_posts(query, cap=None):
         for post in posts:
             title = post['data'].get('title')
             permalink = post['data'].get('permalink')
-     
+
             if title is not None and title not in titles:
                 clean = clean_title(title)
                 clean_titles.append(clean)
@@ -133,7 +139,8 @@ def get_posts(query, cap=None):
 
     if not titles:
         return
-    return titles, permalinks  # Return both titles and permalinks
+    return titles, permalinks
+
 
 def get_comments(permalink):
     """
@@ -163,5 +170,3 @@ def get_comments(permalink):
     data = res.json()[1]['data']['children']
     comments = [comment['data'].get('body') for comment in data]
     return comments
-
-
