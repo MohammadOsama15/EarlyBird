@@ -5,7 +5,7 @@ from flask import redirect
 from flask import url_for
 from flask import request
 from . import cache
-from .redditAPI import get_posts, get_comments
+from .api import get_posts, get_comments
 from .inference import model, tokenize_sequence
 from .db_functions import get_timestamp
 from .db_functions import store_timestamp

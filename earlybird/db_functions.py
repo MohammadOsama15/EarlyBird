@@ -5,7 +5,7 @@ from . import db
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-file_handler = logging.FileHandler('earlyBirds.log')
+file_handler = logging.FileHandler('errors.log')
 file_handler.setLevel(logging.INFO)
 logger.addHandler(file_handler)
 

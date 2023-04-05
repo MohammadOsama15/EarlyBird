@@ -12,7 +12,7 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.models import load_model
 
 # import dataframe
-df = pd.read_csv("sentiment140_trimmed.csv")
+df = pd.read_csv("/resources/sentiment140_trimmed.csv")
 # extract tweet
 X = df['tweet']
 # extract label
@@ -42,7 +42,7 @@ else:
         f.write(json.dumps(tokenizer_json, ensure_ascii=False))
         # import GloVe file
         embeddings_index = {}
-        f = open('glove.6B.100d.txt', encoding="utf-8")
+        f = open('/resources/glove.6B.100d.txt', encoding="utf-8")
         for line in f:
             values = line.split()
             word = values[0]
