@@ -1,5 +1,5 @@
 import logging
-from .models import Timestamp, Predictions
+from .models import User, Profile, Timestamp, Title, Comment
 import datetime
 from . import db
 
@@ -16,13 +16,13 @@ def get_timestamp(search_term: str):
     parameters:
         search_term:    search term
     returns:
-        time of last query
+        time of last query, id associated with query
     """
 
-    res = Timestamp.query.filter_by(search_term=search_term).first()
+    res = Timestamp.query.filter_by(search_term=search_term)
     try:
         if res:
-            return res.time
+            return [res.first().time, res.first().id]
     except Exception as e:
         logger.error(
             f"Timestamp for {search_term} not found: {e}")
@@ -68,38 +68,48 @@ def delete_timestamp(search_term: str):
     return
 
 
-def get_predictions(fk: str):
+def get_titles(fk: int):
     """
-    retrieves corpus and predictions from db
+    retrieves titles and predictions from db
     parameters:
-        fk:  search term
+        fk:  primary key stored in Timestamp table
     returns:
-        zip object consisting of corpus and predictions
+        list of dictionaries consisting of title, prediction, permalink, and id
     """
-    res = Predictions.query.filter_by(fk=fk)
+    res = Title.query.filter_by(timestamp_id=fk)
     try:
         if res:
             corpus = []
             predictions = []
+            permalinks = []
+            id = []
             for row in res:
-                corpus.append(row.comment)
+                corpus.append(row.title)
                 predictions.append(row.prediction)
-            return zip(corpus, predictions)
+                permalinks.append(row.permalink)
+                id.append(row.id)
+            res = zip(corpus, predictions, permalinks, id)
+            res = [{'title': t, 'prediction': p, 'permalink': l, 'id': i}
+                   for t, p, l, i in res]
+            return res
     except Exception as e:
         logger.error(f"Predictions for {fk} not found: {e}")
 
 
-def store_prediction(fk: str, predictions: zip):
+def store_titles(fk: int, data: list):
     """
     stores corpus and predictions into db
     parameters:
-        fk: foreign key (search term)
-        predictions:    a zipped object consisting of corpus and predictions
+        fk: timestamp.id
+        data: tuple consisting of title, prediction, and permalink
     """
     try:
-        for comment, prediction in predictions:
-            stmt = Predictions(
-                fk=fk, comment=comment, prediction=prediction)
+        for item in data:
+            stmt = Title(
+                timestamp_id=fk,
+                title=item['title'],
+                prediction=item['prediction'],
+                permalink=item['permalink'])
             db.session.add(stmt)
         db.session.commit()
         db.session.close()
@@ -109,14 +119,14 @@ def store_prediction(fk: str, predictions: zip):
     return
 
 
-def delete_predictions(fk: str):
+def delete_titles(fk: int):
     """
     delete query and timestamp from db
     parameters:
-        fk: foreign key (search term)
+        fk: timestamp.id
     """
     try:
-        res = Predictions.query.filter_by(fk=fk)
+        res = Title.query.filter_by(timestamp_id=fk)
         if res:
             for row in res:
                 db.session.delete(row)
@@ -125,6 +135,18 @@ def delete_predictions(fk: str):
     except Exception as e:
         logger.error(f"There are no predictions for {fk} to delete: {e}")
     return
+
+
+def get_comments(fk: int):
+    pass
+
+
+def store_comments(fk: str, predictions: zip):
+    pass
+
+
+def delete_comments(fk: str):
+    pass
 
 
 logger.removeHandler(file_handler)

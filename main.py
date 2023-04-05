@@ -10,9 +10,9 @@ from .inference import model, tokenize_sequence
 from .db_functions import get_timestamp
 from .db_functions import store_timestamp
 from .db_functions import delete_timestamp
-from .db_functions import get_predictions
-from .db_functions import store_prediction
-from .db_functions import delete_predictions
+from .db_functions import get_titles
+from .db_functions import store_titles
+from .db_functions import delete_titles
 from datetime import timedelta
 import datetime
 import logging
@@ -50,7 +50,7 @@ def profile():
     Returns:
     The rendered profile.html template with the user's first name.
     """
-    return render_template("profile.html", name=current_user.firstname)
+    return render_template("profile.html")
 
 
 @main.route('/search')
@@ -64,31 +64,32 @@ def search():
     """
     queried, data, is_in_db = False, None, "no"
     query = request.args.get("searchTerm")
-    data = submit_query(query, cap= 50)
-    # if query:
-    #     queried = True
-    #     timestamp_from_db = get_timestamp(search_term=query)
-    #     predictions_from_db = get_predictions(fk=query)
-    #     if timestamp_from_db and predictions_from_db:
-    #         is_in_db = "yes"
-    #         now = datetime.datetime.utcnow()
-    #         if (timestamp_from_db + timedelta(hours=24)) < now:
-    #             is_in_db = "expired"
-    # match is_in_db:
-    #     case "no":
-    #         data = submit_query(query, cap=50)
-    #     case "expired":
-    #         data = submit_query(query, cap=50)
-    #         delete_timestamp(search_term=query)
-    #         delete_predictions(fk=query)
-    #     case "yes":
-    #         data = predictions_from_db
-    # if data:
-    #     if is_in_db != "yes":
-    #         store_timestamp(search_term=query)
-    #         store_prediction(fk=query, predictions=data)
-    # Assuming 'titles', 'predictions', and 'permalinks' are the lists containing the data
-  
+    CAP = 50
+    if query:
+        queried = True
+        exists_timestamp = get_timestamp(search_term=query)
+        if exists_timestamp:
+            timestamp_from_db, stored_query_id = exists_timestamp
+            titles_from_db = get_titles(stored_query_id)
+            if timestamp_from_db and titles_from_db:
+                is_in_db = "yes"
+                now = datetime.datetime.utcnow()
+                if (timestamp_from_db + timedelta(hours=24)) < now:
+                    is_in_db = "expired"
+    match is_in_db:
+        case "no":
+            data = submit_query(query, cap=CAP)
+        case "expired":
+            data = submit_query(query, cap=CAP)
+            delete_timestamp(fk=stored_query_id)
+            delete_titles(fk=stored_query_id)
+        case "yes":
+            data = titles_from_db
+    if data:
+        if is_in_db != "yes":
+            store_timestamp(search_term=query)
+            _, timestamp_id = get_timestamp(search_term=query)
+            store_titles(fk=timestamp_id, data=data)
     return render_template("search.html", data=data, queried=queried)
 
 
@@ -102,9 +103,10 @@ def information():
     """
     return render_template("information.html")
 
+
 @main.route('/comments/r/<path:permalink>')
 @login_required
-def comments(permalink):
+def comments(permalink: str):
     """
     The comments route, which requires user logged in.
 
@@ -114,8 +116,9 @@ def comments(permalink):
     Returns:
     The rendered comments.html template with the comments for the post.
     """
-    comments = get_comments(permalink)
-    return render_template("comments.html", comments=comments)
+    data = infer_comments(permalink)
+    return render_template("comments.html", data=data)
+
 
 @cache.memoize(timeout=3600)
 def submit_query(query: str, cap: int):
@@ -135,11 +138,39 @@ def submit_query(query: str, cap: int):
             titles, permalinks = results
             tokenized_sequence = tokenize_sequence(titles)
             predictions = model.predict(tokenized_sequence)
-            data = zip(results, predictions,permalinks)
-            data = [{'title': t, 'prediction': p, 'permalink': l} for t, p, l in zip(titles, predictions, permalinks)]
+            data = zip(results, predictions, permalinks)
+            data = [{'title': t, 'prediction': p, 'permalink': l}
+                    for t, p, l in zip(titles, predictions, permalinks)]
             return data
         return
     except Exception as e:
         logger.error(
             f"Error querying user {current_user}: {str(e)}")
+        return None
+
+
+@cache.memoize(timeout=3600)
+def infer_comments(permalink: str):
+    """
+    Submits a query to the Reddit API, tokenizes the results, and makes predictions using a model.
+
+    Parameters:
+    fk (int): Title.id
+    permalink: permalink of the title
+
+    Returns:
+    list: A list of dictionaries containing the comments and the associated predictions.
+    """
+    try:
+        comments = get_comments(permalink)
+        if comments:
+            tokenized_sequence = tokenize_sequence(comments)
+            predictions = model.predict(tokenized_sequence)
+            data = zip(comments, predictions)
+            data = [{'comment': c, 'prediction': p}
+                    for c, p in zip(comments, predictions)]
+            return data
+    except Exception as e:
+        logger.error(
+            f"Could not fetch comments: {str(e)}")
         return None
