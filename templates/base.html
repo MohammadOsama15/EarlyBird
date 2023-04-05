@@ -20,68 +20,18 @@
 
   {% block body %}
 
-  <body>
-    <!-- container-fluid spans entire viewport width -->
-    <section class="container-fluid">
-      <div class="row">
-        <section class="container-fluid">
-          <div class="row">
-            <nav class="navbar navbar-expand-lg">
-              <div class="container-fluid">
-                {% if request.endpoint == 'main.comments' %}
-                  <button id="back-button" class="btn btn-link text-dark" onclick="window.history.back();">
-                    <i class="bi bi-arrow-left"></i>
-                  </button>
-                {% endif %}
-                <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                {% if not current_user.is_authenticated %}
-                <a class="nav-link text-dark" href="{{ url_for('main.index') }}">
-                  <i class="bi bi-house-door-fill"></i>
-                  Home
-                </a>
-              </li> 
-              {% endif %}      
-              {% if current_user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link text-dark" href="{{ url_for('main.search') }}">
-                  <i class="bi bi-search"></i>
-                  Search
-                </a>
-              </li>
-              {% endif %}              
-              {% if current_user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link text-dark" href="{{ url_for('main.profile') }}">
-                  <i class="bi bi-person"></i>
-                  Profile
-                </a>
-              </li>
-              {% endif %}
-              {% if not current_user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link text-dark" href="{{ url_for('auth.login') }}">
-                  <i class="bi bi-box-arrow-in-right"></i>
-                  Login
-                </a>
-              </li>
-              {% endif %}
-              {% if not current_user.is_authenticated %}
-              <li>
-                <a class="nav-link text-dark" href="{{ url_for('auth.signup') }}">
-                  <i class="bi bi-person-plus-fill"></i>
-                  Sign Up
-                </a>
-              </li>
-              {% endif %}
-              {% if current_user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link text-dark" href="{{ url_for('auth.logout') }}">
-                  <i class="bi bi-box-arrow-right"></i>
-                  Logout
-                </a>
-              </li>
-
+<body>
+  <!-- container-fluid spans entire viewport width -->
+  <section class="container-fluid">
+    <div class="row">
+      <section class="container-fluid">
+        <div class="row">
+          <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+              {% if request.endpoint == 'main.comments' %}
+              <button id="back-button" class="btn btn-link text-dark" onclick="window.history.back();">
+                <i class="bi bi-arrow-left"></i>
+              </button>
               {% endif %}
               <ul class="navbar-nav ms-auto">
                 <li class="nav-item">

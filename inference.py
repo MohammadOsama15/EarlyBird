@@ -10,9 +10,10 @@ TRUNCATION_TYPE = 'post'
 
 # suppress tensorflow warnings
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+module_dir = os.path.dirname(__file__)
 
-model = load_model("./model.h5")
-with open('tokens.json') as f:
+model = load_model(module_dir+"/model.h5")
+with open(module_dir+'/tokens.json') as f:
     data = json.load(f)
     Tokenizer = tokenizer_from_json(data)
 
