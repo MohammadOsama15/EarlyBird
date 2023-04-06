@@ -1,3 +1,4 @@
+
 import unittest
 import numpy as np
 from ..inference import tokenize_sequence, load_model
