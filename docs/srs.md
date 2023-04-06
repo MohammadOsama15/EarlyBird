@@ -1,7 +1,7 @@
 # 1. Introduction
 
 ## 1.1 Purpose
-This document describes the implementation details and objectives of our upcoming Twitter sentiment analysis web app, EarlyBird. 
+This document describes the implementation details and objectives of our upcoming Twitter sentiment analysis web app,  
 
 ## 1.2 Intended Audience*
 The audience of this document is students and instructors in CSC 4351/4352, to communicate our building process and inspire others in developing their own applications.
@@ -17,7 +17,7 @@ Twitter is one of the largest datasets in the world containing sentiments of use
 ## 1.5 Definitions and Acronyms
 The remainder of this document will use the following conventions:
 * “EarlyBird” will refer to our application in its entirety.
-* “User” will refer to a user of EarlyBird.
+* “User” will refer to a user of 
 * “Tweeter” will refer to a user of Twitter (i.e. a User is  performing sentiment analysis on that Tweeter’s Twitter account).
 
 In addition:
