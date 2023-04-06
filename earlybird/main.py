@@ -110,7 +110,7 @@ def search():
             data = submit_query(query, cap=CAP)
         case "expired":
             data = submit_query(query, cap=CAP)
-            delete_timestamp(fk=stored_query_id)
+            delete_timestamp(search_term=query)
             delete_titles(fk=stored_query_id)
         case "yes":
             data = titles_from_db
