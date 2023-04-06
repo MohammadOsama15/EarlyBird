@@ -1,6 +1,7 @@
 import logging
-from .models import User, Profile, Timestamp, Title, Comment
 import datetime
+import json
+from .models import User, Profile, Timestamp, Title, Comment
 from . import db
 
 logger = logging.getLogger(__name__)
@@ -147,6 +148,47 @@ def store_comments(fk: str, predictions: zip):
 
 def delete_comments(fk: str):
     pass
+
+
+def get_profile(user_id: int):
+    """
+    Retrieves user profile from db
+    Parameters:
+        user_id:    current_user.id
+    Returns:
+        dictionary containing user profile
+    """
+    res = Profile.query.filter_by(user_id=user_id).first()
+    email = User.query.filter_by(id=user_id).first().email
+    try:
+        if res:
+            res = {'username': res.username,
+                   'firstname': res.firstname,
+                   'lastname': res.lastname,
+                   'biography': res.biography,
+                   'email': email,
+                   'phone': res.phone}
+        return res
+
+    except Exception as e:
+        logger.error(f"Profile for {user_id} not found: {e}")
+        return None
+
+
+def update_password(user_id: int, fields: dict):
+    print("I am trying to update password")
+    target_user = User.query.filter_by(id=user_id).first()
+    setattr(target_user, 'password', fields['newpassword'])
+    db.session.commit()
+    return
+
+
+def update_profile(user_id: int, fields: dict):
+    target_profile = Profile.query.filter_by(user_id=user_id).first()
+    for key in fields.keys():
+        setattr(target_profile, key, fields[key])
+    db.session.commit()
+    return
 
 
 logger.removeHandler(file_handler)
