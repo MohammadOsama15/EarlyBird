@@ -13,7 +13,7 @@ class TestInference(unittest.TestCase):
                                 "i'm so tired of writing titles"]}
 
     def test_load_model(self):
-        self.assertEqual(bool(load_model("../ml/model.h5")), True)
+        self.assertEqual(bool(load_model("earlybird/ml/model.h5")), True)
 
     def test_str_tokenization(self):
         self.assertEqual(type(tokenize_sequence(
