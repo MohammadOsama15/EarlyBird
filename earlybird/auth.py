@@ -52,11 +52,12 @@ def signup_post():
 
     new_user = User(email=email,
                     password=generate_password_hash(password, method='sha256'))
-    new_user_profile = Profile(username=firstname + lastname,
-                               firstname=firstname,
-                               lastname=lastname)
+
     db.session.add(new_user)
     db.session.flush()
+    new_user_profile = Profile(firstname=firstname,
+                               lastname=lastname,
+                               user_id=new_user.id)
     db.session.add(new_user_profile)
     db.session.commit()
     return redirect(url_for('auth.login'))

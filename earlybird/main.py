@@ -1,5 +1,6 @@
 from flask_login import login_required, current_user
 from flask import Blueprint
+from flask import flash
 from flask import render_template
 from flask import redirect
 from flask import url_for
@@ -13,7 +14,11 @@ from .db_functions import delete_timestamp
 from .db_functions import get_titles
 from .db_functions import store_titles
 from .db_functions import delete_titles
+from .db_functions import get_profile
+from .db_functions import update_password
+from .db_functions import update_profile
 from datetime import timedelta
+from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 import logging
 
@@ -41,7 +46,7 @@ def index():
     return render_template("index.html")
 
 
-@main.route('/profile')
+@main.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     """
@@ -50,7 +55,31 @@ def profile():
     Returns:
     The rendered profile.html template with the user's first name.
     """
-    return render_template("profile.html")
+    user_payload = {}
+    profile_payload = {}
+    if request.method == 'POST':
+
+        user_params = {"password",
+                       "newpassword",
+                       "confirmpassword"}
+        user_payload = {key: value for key,
+                        value in request.form.items() if key in user_params and value != ""}
+        profile_payload = {key: value for key,
+                           value in request.form.items() if key not in user_params and value != ""}
+        if profile_payload:
+            update_profile(current_user.id, profile_payload)
+        if set(["password", "newpassword", "confirmpassword"]).issubset(user_payload.keys()):
+            print("all three fields are present")
+            if not check_password_hash(current_user.password, user_payload['password']):
+                flash("Please check your password and try again.")
+            else:
+                user_payload['newpassword'] = generate_password_hash(
+                    user_payload['newpassword'], method='sha256')
+                update_password(current_user.id, user_payload)
+                return redirect(url_for('auth.logout'))
+
+    profile = get_profile(current_user.id)
+    return render_template("profile.html", profile=profile, user=user_payload)
 
 
 @main.route('/search')
