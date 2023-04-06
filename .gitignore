@@ -1,4 +1,12 @@
+
+*.egg-info/
+*.pyc
+.coverage
 .env
-__pycache__
-model_final.h5
-*.log
+.pytest_cache/
+__pycache__/
+build/
+dist/
+htmlcov/
+instance/
+resources/
