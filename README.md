@@ -35,3 +35,6 @@ EB_SECRET = "YOUR_RANDOM_STRING"
 ## running the application
    - if inside project directory: python3 -m flask --app __init__.py --debug run
    - if in parent dir: python3 -m flask --app project_dir_name --debug run
+
+## Deployed version of the app can be visited at:
+   - reddit-sentiment-analyzer.fly.dev
