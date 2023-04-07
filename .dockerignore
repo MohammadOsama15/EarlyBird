@@ -1,1 +1,12 @@
-fly.toml
+
+*.egg-info
+*.pyc
+.coverage
+.DS_Store
+.pytest_cache
+__pycache__
+dist
+htmlcov
+instance
+resources/
+tests/

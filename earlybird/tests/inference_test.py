@@ -3,10 +3,7 @@ import os
 import unittest
 import numpy as np
 import pathlib
-from ..inference import tokenize_sequence, load_model
-
-module_dir = os.path.dirname(__file__)
-module_dir = os.path.dirname(module_dir)
+from ..inference import tokenize_sequence, model
 
 
 class TestInference(unittest.TestCase):
@@ -19,7 +16,7 @@ class TestInference(unittest.TestCase):
 
     def test_load_model(self):
         self.assertEqual(
-            bool(load_model(module_dir+"/ml/model.h5")), True)
+            bool(model), True)
 
     def test_str_tokenization(self):
         self.assertEqual(type(tokenize_sequence(

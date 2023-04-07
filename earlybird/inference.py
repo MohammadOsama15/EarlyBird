@@ -13,7 +13,7 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 module_dir = os.path.dirname(__file__)
 
 model = load_model(module_dir+"/ml/model.h5")
-with open(module_dir+'/ml/tokens.json') as f:
+with open(module_dir+"/ml/tokens.json") as f:
     data = json.load(f)
     Tokenizer = tokenizer_from_json(data)
 
