@@ -2,7 +2,6 @@
 import os
 import unittest
 import numpy as np
-import pathlib
 from ..inference import tokenize_sequence
 
 
@@ -13,10 +12,6 @@ class TestInference(unittest.TestCase):
                                 "omfg more titles",
                                 "ugh aren't these titles annoying",
                                 "i'm so tired of writing titles"]}
-
-    # def test_load_model(self):
-    #     self.assertEqual(
-    #         bool(model), True)
 
     def test_str_tokenization(self):
         self.assertEqual(type(tokenize_sequence(
