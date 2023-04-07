@@ -1,5 +1,5 @@
 import unittest
-from redditAPI import clean_title
+from ..api import clean_title
 
 
 class TestCleanTitle(unittest.TestCase):

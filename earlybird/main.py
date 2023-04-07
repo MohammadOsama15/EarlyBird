@@ -75,7 +75,7 @@ def profile():
             else:
                 user_payload['newpassword'] = generate_password_hash(
                     user_payload['newpassword'], method='sha256')
-                update_password(current_user.id, user_payload)
+                update_password(current_user.id, user_payload['newpassword'])
                 return redirect(url_for('auth.logout'))
 
     profile = get_profile(current_user.id)

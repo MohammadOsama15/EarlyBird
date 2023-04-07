@@ -175,18 +175,21 @@ def get_profile(user_id: int):
         return None
 
 
-def update_password(user_id: int, fields: dict):
-    print("I am trying to update password")
+def update_password(user_id: int, newpassword: str):
     target_user = User.query.filter_by(id=user_id).first()
-    setattr(target_user, 'password', fields['newpassword'])
+    setattr(target_user, 'password', newpassword)
     db.session.commit()
     return
 
 
 def update_profile(user_id: int, fields: dict):
     target_profile = Profile.query.filter_by(user_id=user_id).first()
+    target_email = User.query.filter_by(id=user_id).first()
     for key in fields.keys():
-        setattr(target_profile, key, fields[key])
+        if key != 'email':
+            setattr(target_profile, key, fields[key])
+        else:
+            setattr(target_email, key, fields[key])
     db.session.commit()
     return
 
