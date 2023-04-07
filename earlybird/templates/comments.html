@@ -1,19 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
+
 <div class="container">
   <h1>Comments</h1>
-  <div class="col-sm-12 col-md-10 col-lg-8 mx-auto" style="padding: 20px;">
-    <ul class="list-group">
-      {% if data %}
-      {% for item in data %}
-      {% if item['comment'] != "[deleted]" %}
-      <li class="list-group-item">{{ item['comment'] }} {{ item['prediction'] }}</li>
-      {% endif %}
-      {% else %}
-      <li class="list-group-item">No comments found</li>
-      {% endfor %}
-      {% endif %}
-    </ul>
+  <div class="container col-lg-12">
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="text-center">Negative</h2>
+        <ul class="list-group">
+          {% if data %}
+          {% for item in data %}
+          {% if item['comment'] != "[deleted]" and item['prediction']|float < 0.5 %}
+          <li class="list-group-item list-group-item-danger">{{ item['comment'] }} {{ item['prediction'] }}<i class="fas fa-frown"></i></li>
+          {% endif %}
+          {% endfor %}
+          {% else %}
+          <li class="list-group-item">No comments found</li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h2 class="text-center">Positive</h2>
+        <ul class="list-group">
+          {% if data %}
+          {% for item in data %}
+          {% if item['comment'] != "[deleted]" and item['prediction']|float >= 0.5 %}
+          <li class="list-group-item list-group-item-success">{{ item['comment'] }} {{ item['prediction'] }}<i class="fas fa-grin"></i></li>
+          {% endif %}
+          {% endfor %}
+          {% else %}
+          <li class="list-group-item">No comments found</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
 <style>

@@ -2,6 +2,9 @@
 
 {% block content %}
 {% set background_url = url_for('static', filename='jumbotron.png') %}
+{% set box_img_1 = url_for('static', filename='box-img-1.png') %}
+{% set box_img_2 = url_for('static', filename='box-img-2.png') %}
+{% set box_img_3 = url_for('static', filename='box-img-3.png') %}
 
 <style>
   .jumbotron-fluid {
@@ -13,33 +16,104 @@
     width: 100%;
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .jumbotron-title {
+    font-size: 60px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .jumbotron-subtitle {
+    font-size: 28px;
   }
 
   .container {
-    padding-top: 1rem;
+    padding-top: 2rem;
     padding-left: 0;
     padding-right: 0;
-
   }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+
+  .box-text {
+    text-align: justify;
+  }
+
+  .box {
+    flex: 0 0 calc(50% - 30px);
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 1rem;
+  }
+
   .content-card {
-    background-color: #303030;
-    padding: 2rem;
+    background-color: #708090; /* Box background color */
+    padding: 1.5rem;
     border-radius: 0.25rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    color:whitesmoke
+    color: whitesmoke;
   }
+
+  @media (min-width: 768px) {
+    .jumbotron-fluid {
+      height: 100vh;
+      background-attachment: fixed;
+      background-size: contain;
+    }
+
+  .box-image {
+    height: auto;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
 </style>
 <div class="jumbotron jumbotron-fluid">
+    <div>
+      <h1 class="jumbotron-title">Welcome to EarlyBird</h1>
+      <p class="jumbotron-subtitle">Your gateway to sentiment analysis on Reddit</p>
+    </div>
 </div>
 <div class="container">
-  <div class="content-card">
-    <h1 class="mb-3 text-center">Sign up and Get Started</h1>
-    <h4 class="mb-3 text-center">Unlock the Emotions Behind Reddit Posts</h4>
-
-    <p>Join the conversation on Reddit with confidence. Our sentiment analyzer offers powerful insights into the emotions behind post titles, so you can engage with the community in a more meaningful way. Whether you're tracking trends or exploring new topics, our tool offers accurate and real-time analysis of the sentiment on Reddit.</p>
-
-    <div class="text-center">
-      <a class="btn btn-outline-primary btn-lg" href="{{ url_for('auth.signup') }}" role="button">Sign up!</a>
+  <div class="row">
+    <div class="box content-card">
+      <div class="box-text">
+        <p>Introducing EarlyBird, our innovative Reddit sentiment analyzer application designed to offer users a unique insight into the emotions behind Reddit posts and comments. EarlyBird provides a seamless user experience, allowing users to sign up or log in with ease. After logging in, users are directed to a search page where they can enter a Reddit username to dive into the world of sentiment analysis. Our application fetches the titles of all the posts made by the specified user, analyzing them through our advanced machine learning model, trained with Sentiment140.</p>
+      </div>
+    </div>
+    <div class="box content-card box-image" style="background-image: url({{ box_img_1 }});;">
+      <!-- Top Right Block -->
+    </div>
+  </div>
+  <div class="row">
+    <div class="box content-card box-image" style="background-image: url({{ box_img_2 }});;">
+      <!-- Middle Left Block -->
+    </div>
+    <div class="box content-card">
+      <div class="box-text">
+        <p>Each post title is assessed based on its sentiment score, with values greater than 0.5 deemed positive and those less than 0.5 considered negative. These titles are then displayed, making them clickable for users to explore further. Upon clicking a title, EarlyBird fetches all comments related to the post, running them through the sentiment analysis model as well. The comments are similarly divided into positive and negative categories, providing a comprehensive view of the sentiments expressed in the Reddit post and its subsequent discussion.</p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="box content-card">
+      <div class="box-text">
+        <p>EarlyBird's visually appealing interface presents the positive and negative titles and comments in two separate columns, with positive sentiments highlighted in green and negative sentiments in red. This intuitive color-coding system allows users to quickly identify and understand the prevailing emotions behind the content they are viewing. Whether you're a casual Reddit user or a business seeking to analyze customer feedback, EarlyBird is the perfect tool for gaining valuable insights into the sentiments expressed on one of the world's largest online platforms. Discover the power of sentiment analysis with EarlyBird and unlock a new perspective on Reddit content today.</p>
+      </div>
+    </div>
+    <div class="box content-card box-image" style="background-image: url({{ box_img_3 }});;">
+      <!-- Top Right Block -->
     </div>
   </div>
 </div>
