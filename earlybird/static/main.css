@@ -25,6 +25,31 @@ body {
   -webkit-animation-fill-mode: forwards;
 }
 
+/* Add responsive styles for different screen sizes */
+@media screen and (min-width: 768px) {
+  /* Styles for larger screens go here */
+}
+
+/* Add max-width to container class to prevent content from being too wide on larger screens */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Make the navigation bar responsive */
+.navbar {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Align nav items on larger screens */
+@media screen and (min-width: 768px) {
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
 /* define fadeout animation for success button */
 @keyframes bg-success {
   from {
