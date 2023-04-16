@@ -125,16 +125,6 @@ button:hover,
   /* border-color: var(--tertiary-color); */
 }
 
-/* input[type="text"], input[type="search"] {
-  background-color: var(--secondary-color);
-  color: var(--text-color);
-  /* border-color: var(--tertiary-color); */
-
-/* This is for the input box taking grey color */
-input[type="text"]:focus,
-input[type="search"]:focus {
-  /* border-color: var(--accent-color); */
-}
 
 /* Side bar theme */
 .side {
