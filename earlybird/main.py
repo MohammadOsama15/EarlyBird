@@ -17,6 +17,7 @@ from .db_functions import delete_titles
 from .db_functions import get_profile
 from .db_functions import update_password
 from .db_functions import update_profile
+from .models import Timestamp
 from datetime import timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
@@ -45,6 +46,19 @@ def index():
         return redirect(url_for('main.search'))
     return render_template("index.html")
 
+@main.route('/search_history')
+@login_required
+def search_history():
+    search_history_data = Timestamp.query.order_by(Timestamp.time.desc()).all()
+    unique_search_history_data = []
+    seen_search_terms = set()
+
+    for search in search_history_data:
+        if search.search_term not in seen_search_terms:
+            unique_search_history_data.append(search)
+            seen_search_terms.add(search.search_term)
+
+    return render_template("search_history.html", search_history=unique_search_history_data)
 
 @main.route('/profile', methods=['GET', 'POST'])
 @login_required
