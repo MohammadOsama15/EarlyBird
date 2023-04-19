@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>All Users' Search History</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Search Term</th>
+                <th>Date and Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for search in search_history %}
+                <tr>
+                    <td>{{ search.search_term }}</td>
+                    <td>{{ search.time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
