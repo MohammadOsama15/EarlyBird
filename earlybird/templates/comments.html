@@ -1,86 +1,94 @@
 {% extends "base.html" %}
 {% block content %}
-
-<div class="container">
-  <h1>Comments</h1>
-  <div class="container col-lg-12">
-    <div class="row">
-      <div class="col-md-6">
-        <h2 class="text-center">Negative</h2>
-        <ul class="list-group">
-          {% if data %}
-          {% for item in data %}
-          {% if item['comment'] != "[deleted]" and item['prediction']|float < 0.5 %}
-          <li class="list-group-item list-group-item-danger">
-            <div class="d-flex flex-column w-100">
-              <div>
-                {{ item['comment'] }} {{ item['prediction'] }} <i class="fas fa-frown ml-2"></i>
-              </div>
-              <div class="d-flex align-items-center">
-                <span>Rate this sentiment analysis:</span>
-                <i class="fa-solid fa-thumbs-up custom-thumb-up ml-2" onclick="handleThumbsUp(event, this)"></i>
-                <i class="fa-solid fa-thumbs-down custom-thumb-down ml-2" onclick="handleThumbsDown(event, this)"></i>
-              </div>
+{% if data %}
+<div class="container col-lg-12">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="text-center">Negative</h2>
+      <ol class="list-group">
+        {% for item in data %}
+        {% if item['prediction'] < 0.5 %} <li class="list-group-item list-group-item-danger">
+          <div class="d-flex flex-column w-100">
+            <div style="text-align:left">
+              {{ item['comment'] }}
+              {{ item['prediction'] }} <i class="fas fa-grin"></i>
+              <p>
+                Bad inference? Thumb me down:
+                <i class="fa-solid fa-thumbs-down custom-thumb-down ml-2"
+                onclick="handleThumbsDown(event, this, '{{item['comment']|escape}}', '{{item['prediction'][0]}}');">
+                </i>
+              </p>
             </div>
+          </div>
           </li>
           {% endif %}
           {% endfor %}
-          {% else %}
-          <li class="list-group-item">No comments found</li>
-          {% endif %}
-        </ul>
-      </div>
-      <div class="col-md-6">
-        <h2 class="text-center">Positive</h2>
-        <ul class="list-group">
-          {% if data %}
-          {% for item in data %}
-          {% if item['comment'] != "[deleted]" and item['prediction']|float >= 0.5 %}
-          <li class="list-group-item list-group-item-success">
-            <div class="d-flex flex-column w-100">
-              <div>
-                {{ item['comment'] }} {{ item['prediction'] }} <i class="fas fa-grin ml-2"></i>
-              </div>
-              <div class="d-flex align-items-center">
-                <span>Rate this sentiment analysis:</span>
-                <i class="fa-solid fa-thumbs-up custom-thumb-up ml-2" onclick="handleThumbsUp(event, this)"></i>
-                <i class="fa-solid fa-thumbs-down custom-thumb-down ml-2" onclick="handleThumbsDown(event, this)"></i>
-              </div>
+      </ol>
+    </div>
+    <div class="col-md-6">
+      <h2 class="text-center">Positive</h2>
+      <ol class="list-group">
+        {% for item in data %}
+        {% if item['prediction'] >= 0.5 %}
+        <li class="list-group-item list-group-item-success">
+          <div class="d-flex flex-column w-100">
+            <div style="text-align:left">
+              {{ item['comment'] }}
+              {{ item['prediction'] }} <i class="fas fa-grin"></i>
+              <p>
+                Bad inference? Thumb me down:
+                <i class="fa-solid fa-thumbs-down custom-thumb-down ml-2"
+                onclick="handleThumbsDown(event, this, '{{item['comment']|escape}}', '{{item['prediction'][0]}}');">
+                </i>
+              </p>
             </div>
-          </li>
-          {% endif %}
-          {% endfor %}
-          {% else %}
-          <li class="list-group-item">No comments found</li>
-          {% endif %}
-        </ul>
-      </div>
+          </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ol>
     </div>
   </div>
 </div>
+{% else %}
+<div>No comments found!</div>
+{% endif %}
 <style>
-  .container {
-    padding-top: 20px;
+  .btn {
+    background-color: rgb(80, 80, 80);
   }
-  .fa-solid.fa-thumbs-up, .fa-solid.fa-thumbs-down {
+  .fa-solid.fa-thumbs-up,
+  .fa-solid.fa-thumbs-down {
     cursor: pointer;
   }
-
   .custom-thumb-up {
     margin-left: 10px;
   }
-
   .custom-thumb-down {
     margin-left: 10px;
   }
 </style>
 <script>
-  function handleThumbsUp(event, element) {
-    alert("Thumbs up clicked");
-  }
-
-  function handleThumbsDown(event, element) {
-    alert("Thumbs down clicked");
+  function handleThumbsDown(event, element, corpus, prediction) {
+    alert("Thank you. The message: [" + corpus + "] with an inference score of: [" + prediction + "] has been reported as inaccurate.");
+    const data = {
+      corpus: corpus,
+      prediction: prediction
+    };
+    fetch('/store-labeled-data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   }
 </script>
 {% endblock %}

@@ -1,6 +1,7 @@
 from flask_login import login_required, current_user
 from flask import Blueprint
 from flask import flash
+from flask import jsonify
 from flask import render_template
 from flask import redirect
 from flask import url_for
@@ -15,6 +16,7 @@ from .db_functions import get_titles
 from .db_functions import store_titles
 from .db_functions import delete_titles
 from .db_functions import get_profile
+from .db_functions import store_labeled_data
 from .db_functions import update_password
 from .db_functions import update_profile
 from .models import Timestamp
@@ -162,6 +164,13 @@ def comments(permalink: str):
     data = infer_comments(permalink)
     return render_template("comments.html", data=data)
 
+@main.route('/store-labeled-data', methods=['POST'])
+@login_required
+def add_training_data():
+    comment = request.json
+    store_labeled_data(comment['corpus'], comment['prediction'])
+    return jsonify({'message': 'Data stored successfully.'})
+
 
 @cache.memoize(timeout=3600)
 def submit_query(query: str, cap: int):
@@ -190,8 +199,8 @@ def submit_query(query: str, cap: int):
         logger.error(
             f"Error querying user {current_user}: {str(e)}")
         return None
-
-
+    
+    
 @cache.memoize(timeout=3600)
 def infer_comments(permalink: str):
     """

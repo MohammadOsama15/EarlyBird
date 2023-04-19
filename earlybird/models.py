@@ -40,3 +40,8 @@ class Comment(db.Model):
     comment = db.Column(db.Text())
     prediction = db.Column(db.Float)
     title_id = db.Column(db.Integer, db.ForeignKey('title.id'))
+
+class TrainingData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.Text(), unique=True)
+    label = db.Column(db.Integer)
