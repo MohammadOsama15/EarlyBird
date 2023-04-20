@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <div class="form-group col-sm-12 col-md-10 col-lg-8 mx-auto mb-3">
+      <div class="search-image mt-3 text-center">
+        <img src="../static/reddit_logo_1.png" style="max-width: 150px; max-height: 150px;">
+      </div>
+    </div>
+    <h1 class="text-center">User Comments</h1>
+    <hr>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Comment</th>
+                  <th scope="col">Timestamp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in data %}
+                {% if "![gif]" not in item.comment %}
+                <tr>
+                  <td>{{ item.comment }}</td>
+                  <td>{{ item.timestamp }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    .card {
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+{% endblock %}

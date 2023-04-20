@@ -13,6 +13,13 @@
       </div>
     </div>
   </div>
+  {% if queried %}
+  {% if query %}
+  <div class="user-comments-link">
+    <a href="{{ user_comments_url }}">Explore the sentiment and history of {{ query }}'s comments</a>
+  </div>
+  {% endif %}
+  {% endif %}
   {% if data %}
   <div class="container col-lg-12">
     <div class="row">
@@ -85,6 +92,14 @@
     .custom-thumb-down {
       margin-left: 10px;
     }
+    .user-comments-link {
+    background-color: white;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    width: fit-content;
+    margin: 20px auto;
+  }
   </style>
   <script>
     function handleThumbsDown(event, element, corpus, prediction) {
