@@ -84,14 +84,16 @@ def get_titles(fk: int):
             predictions = []
             permalinks = []
             id = []
+            cleaned_titles = []
             for row in res:
                 corpus.append(row.title)
                 predictions.append(row.prediction)
                 permalinks.append(row.permalink)
                 id.append(row.id)
-            res = zip(corpus, predictions, permalinks, id)
-            res = [{'title': t, 'prediction': p, 'permalink': l, 'id': i}
-                   for t, p, l, i in res]
+                cleaned_titles.append(row.cleaned_title)
+            res = zip(corpus, predictions, permalinks, id, cleaned_titles)
+            res = [{'title': t, 'prediction': list(p), 'permalink': l, 'id': i, 'cleaned_title': c}
+                   for t, p, l, i, c in res]
             return res
     except Exception as e:
         logger.error(f"Predictions for {fk} not found: {e}")
@@ -110,7 +112,8 @@ def store_titles(fk: int, data: list):
                 timestamp_id=fk,
                 title=item['title'],
                 prediction=item['prediction'],
-                permalink=item['permalink'])
+                permalink=item['permalink'],
+                cleaned_title=item['cleaned_title'])
             db.session.add(stmt)
         db.session.commit()
         db.session.close()

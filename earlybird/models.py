@@ -31,6 +31,7 @@ class Title(db.Model):
     title = db.Column(db.Text())
     prediction = db.Column(db.Float)
     permalink = db.Column(db.Text())
+    cleaned_title = db.Column(db.Text())
     timestamp_id = db.Column(db.Integer, db.ForeignKey('timestamp.id'))
     comments = db.relationship('Comment', backref='title', lazy=True)
 

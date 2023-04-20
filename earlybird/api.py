@@ -47,10 +47,6 @@ def get_access_token():
         return None
 
 
-def clean_corpus(titles: list):
-    for item in list:
-        item = clean_title(item)
-    return list
 
 def clean_title(title):
     """

@@ -7,7 +7,7 @@ from flask import redirect
 from flask import url_for
 from flask import request
 from . import cache
-from .api import get_posts, get_comments, get_user_comments, clean_corpus
+from .api import get_posts, get_comments, get_user_comments, clean_title
 from .inference import model, tokenize_sequence
 from .db_functions import get_timestamp
 from .db_functions import store_timestamp
@@ -111,7 +111,7 @@ def search():
     """
     queried, data, is_in_db = False, None, "no"
     query = request.args.get("searchTerm")
-    CAP = 50
+    CAP = 100
     if query:
         queried = True
         exists_timestamp = get_timestamp(search_term=query)
@@ -190,12 +190,16 @@ def submit_query(query: str, cap: int):
     try:
         results = get_posts(query=query, cap=cap)
         if results:
+            cleaned = []
             titles, permalinks = results
+            for title in titles:
+                cleaned.append(clean_title(title))
             tokenized_sequence = tokenize_sequence(titles)
             predictions = model.predict(tokenized_sequence)
-            data = zip(results, predictions, permalinks)
-            data = [{'title': t, 'prediction': p, 'permalink': l}
-                    for t, p, l in zip(titles, predictions, permalinks)]
+            data = [{'title': t, 'prediction': p, 'permalink': l, 'cleaned_title': c}
+                    for t, p, l, c in zip(titles, predictions, permalinks, cleaned)]
+            for item in data:
+                print(item['cleaned_title'])
             return data
         return
     except Exception as e:
@@ -219,12 +223,13 @@ def infer_comments(permalink: str):
     try:
         comments = get_comments(permalink)
         if comments:
-            cleaned_corpus = clean_corpus(comments)
+            cleaned = []
+            for comment in comments:
+                cleaned.append(clean_title(comment))
             tokenized_sequence = tokenize_sequence(comments)
             predictions = model.predict(tokenized_sequence)
-            data = zip(comments, predictions)
-            data = [{'comment': c, 'prediction': p, 'cleaned_corpus': cleaned_corpus}
-                    for c, p, cleaned_corpus in zip(comments, predictions, cleaned_corpus)]
+            data = [{'comment': c, 'prediction': p, 'cleaned_corpus': cleaned}
+                    for c, p, cleaned in zip(comments, predictions, cleaned)]
             return data
     except Exception as e:
         logger.error(
