@@ -7,6 +7,7 @@
       </div>
     </div>
     <h1 class="text-center">User Comments</h1>
+    {% if data %}
     <hr>
     <div class="row">
       <div class="col">
@@ -35,6 +36,12 @@
       </div>
     </div>
   </div>
+  <div class="container text-center mt-5">
+    <button class="btn btn-primary" type="button">Download</button>
+  </div>  
+  {% else %}
+  <p> No results found, please try another Reddit username. </p>
+  {% endif %}
   <style>
     .card {
       background-color: white;
