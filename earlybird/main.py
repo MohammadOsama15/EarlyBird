@@ -7,7 +7,7 @@ from flask import redirect
 from flask import url_for
 from flask import request
 from . import cache
-from .api import get_posts, get_comments, get_user_comments
+from .api import get_posts, get_comments, get_user_comments, clean_title
 from .inference import model, tokenize_sequence
 from .db_functions import get_timestamp
 from .db_functions import store_timestamp
@@ -24,7 +24,9 @@ from datetime import timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 import logging
-
+import os
+import pandas as pd
+import plotly.express as px
 
 main = Blueprint('main', __name__)
 logger = logging.getLogger(__name__)
@@ -109,7 +111,7 @@ def search():
     """
     queried, data, is_in_db = False, None, "no"
     query = request.args.get("searchTerm")
-    CAP = 50
+    CAP = 100
     if query:
         queried = True
         exists_timestamp = get_timestamp(search_term=query)
@@ -188,12 +190,16 @@ def submit_query(query: str, cap: int):
     try:
         results = get_posts(query=query, cap=cap)
         if results:
+            cleaned = []
             titles, permalinks = results
+            for title in titles:
+                cleaned.append(clean_title(title))
             tokenized_sequence = tokenize_sequence(titles)
             predictions = model.predict(tokenized_sequence)
-            data = zip(results, predictions, permalinks)
-            data = [{'title': t, 'prediction': p, 'permalink': l}
-                    for t, p, l in zip(titles, predictions, permalinks)]
+            data = [{'title': t, 'prediction': p, 'permalink': l, 'cleaned_title': c}
+                    for t, p, l, c in zip(titles, predictions, permalinks, cleaned)]
+            for item in data:
+                print(item['cleaned_title'])
             return data
         return
     except Exception as e:
@@ -217,11 +223,13 @@ def infer_comments(permalink: str):
     try:
         comments = get_comments(permalink)
         if comments:
+            cleaned = []
+            for comment in comments:
+                cleaned.append(clean_title(comment))
             tokenized_sequence = tokenize_sequence(comments)
             predictions = model.predict(tokenized_sequence)
-            data = zip(comments, predictions)
-            data = [{'comment': c, 'prediction': p}
-                    for c, p in zip(comments, predictions)]
+            data = [{'comment': c, 'prediction': p, 'cleaned_corpus': cleaned}
+                    for c, p, cleaned in zip(comments, predictions, cleaned)]
             return data
     except Exception as e:
         logger.error(
@@ -239,10 +247,32 @@ def user_comments():
     """
     query = request.args.get("searchTerm")
     if query:
-        comments, comment_timestamps = get_user_comments(query, cap=50)
-        data = zip(comments, comment_timestamps)
-        data = [{'comment': c, 'timestamp': t} for c, t in data]
+        comments, comment_timestamps = get_user_comments(query, cap=200)
+        tokenized_sequence = tokenize_sequence(comments)
+        predictions = model.predict(tokenized_sequence)
+        flattened_predictions = [val for sublist in predictions for val in sublist]
+        df = pd.DataFrame({'timestamp': comment_timestamps, 'prediction': flattened_predictions})
+        print(df.head())
+       
+        # this plots a scatter plot
+   
+        fig = px.scatter(df, x='timestamp', y='prediction', title='sentiment heat map')
+        
+        # to plot pie chart, just count up the number of positive, negative, and neutral comments
+        
+        # this plots a line graph
+        fig = px.line(df, x='timestamp', y='prediction', title='Sentiment over time')
+
+        
+        # this line saves the graph to html file, under templates. You would import this file into the html template
+        # for example <div id="graph"></div> and then in the javascript section, you would embed the html file and display it inside div
+        # to save multiple graphs, change "fig" to something unique for each graph and use "newname.write_html"
+        fig.write_html(os.path.dirname(__file__)+"/templates/graph.html", include_plotlyjs='cdn', full_html=False)
+        
+        data = zip(comments, comment_timestamps, flattened_predictions)
+        data = [{'comment': c, 'timestamp': t, 'predictions': p} for c, t, p in data]
     else:
         data = []
 
     return render_template("user_comments.html", data=data)
+
