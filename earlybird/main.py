@@ -7,7 +7,7 @@ from flask import redirect
 from flask import url_for
 from flask import request
 from . import cache
-from .api import get_posts, get_comments
+from .api import get_posts, get_comments, get_user_comments
 from .inference import model, tokenize_sequence
 from .db_functions import get_timestamp
 from .db_functions import store_timestamp
@@ -135,7 +135,8 @@ def search():
             store_timestamp(search_term=query)
             _, timestamp_id = get_timestamp(search_term=query)
             store_titles(fk=timestamp_id, data=data)
-    return render_template("search.html", data=data, queried=queried)
+    user_comments_url = url_for('main.user_comments', searchTerm=query)
+    return render_template("search.html", query=query, data=data, queried=queried, user_comments_url=user_comments_url)
 
 
 @main.route('/information')
@@ -226,3 +227,22 @@ def infer_comments(permalink: str):
         logger.error(
             f"Could not fetch comments: {str(e)}")
         return None
+    
+@main.route('/user_comments')
+@login_required
+def user_comments():
+    """
+    The user_comments route, which requires user to be logged in.
+
+    Returns:
+    The rendered user_comments.html template with the user's comments.
+    """
+    query = request.args.get("searchTerm")
+    if query:
+        comments, comment_timestamps = get_user_comments(query, cap=50)
+        data = zip(comments, comment_timestamps)
+        data = [{'comment': c, 'timestamp': t} for c, t in data]
+    else:
+        data = []
+
+    return render_template("user_comments.html", data=data)
