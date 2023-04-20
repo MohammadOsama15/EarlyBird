@@ -1,7 +1,7 @@
 import logging
 import datetime
 import json
-from .models import User, Profile, Timestamp, Title, Comment
+from .models import User, Profile, Timestamp, Title, Comment, TrainingData
 from . import db
 
 logger = logging.getLogger(__name__)
@@ -193,5 +193,17 @@ def update_profile(user_id: int, fields: dict):
     db.session.commit()
     return
 
-
+def store_labeled_data(corpus: str, prediction: float):
+    exists = TrainingData.query.filter_by(comment=corpus).first()
+    if exists:
+        return
+    else:
+        if float(prediction) < 0.5:
+            label = 1
+        else:
+            label = 0
+        stmt = TrainingData(comment=corpus, label=label)
+        db.session.add(stmt)
+        db.session.commit()
+        db.session.close()
 logger.removeHandler(file_handler)
