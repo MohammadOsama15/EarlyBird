@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 import time
 import unicodedata
-
+from datetime import datetime
 load_dotenv()
 
 
@@ -165,3 +165,64 @@ def get_comments(permalink):
     data = res.json()[1]['data']['children']
     comments = [comment['data'].get('body') for comment in data]
     return comments
+
+def get_user_comments(query, cap=None):
+    if query is None:
+        print("Error: Query parameter is None")
+        return
+
+    if cap is None:
+        cap = 50
+
+    token = get_access_token()
+    if token is None:
+        return
+
+    headers = {'Authorization': token, 'User-Agent': 'MyAPI/0.0.1'}
+    base_url = 'https://oauth.reddit.com'
+    path = f'/user/{query}/comments'
+    comments = []
+    timestamps = [] 
+    after = None
+
+    while len(comments) < cap:
+        params = {'limit': 100}
+        if after is not None:
+            params['after'] = after
+
+        try:
+            res = requests.get(base_url + path, headers=headers, params=params)
+            res.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            print(f"Error getting comments: {e}")
+            return
+
+        try:
+            data = res.json()['data']
+            comment_data = data['children']
+        except (json.decoder.JSONDecodeError, KeyError):
+            print("Error decoding JSON response from Reddit API")
+            return
+
+        for comment in comment_data:
+            body = comment['data'].get('body')
+            timestamp = comment['data'].get('created_utc')
+            if body is not None and body not in comments:
+                comments.append(body)
+                dt = datetime.fromtimestamp(timestamp)
+                timestamps.append(dt)
+
+                if len(comments) >= cap:
+                    break
+
+        after = data['after']
+        if after is None:
+            break
+
+        time.sleep(1)
+
+    if not comments:
+        return None, None
+    return comments, timestamps
+
+
