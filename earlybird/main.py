@@ -24,7 +24,7 @@ from datetime import timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 import logging
-
+import pandas as pd
 
 main = Blueprint('main', __name__)
 logger = logging.getLogger(__name__)
@@ -239,10 +239,17 @@ def user_comments():
     """
     query = request.args.get("searchTerm")
     if query:
-        comments, comment_timestamps = get_user_comments(query, cap=50)
-        data = zip(comments, comment_timestamps)
-        data = [{'comment': c, 'timestamp': t} for c, t in data]
+        comments, comment_timestamps = get_user_comments(query, cap=200)
+        tokenized_sequence = tokenize_sequence(comments)
+        predictions = model.predict(tokenized_sequence)
+        flattened_predictions = [val for sublist in predictions for val in sublist]
+        df = pd.DataFrame({'timestamp': comment_timestamps, 'prediction': flattened_predictions})
+        print(df.head())
+        
+        data = zip(comments, comment_timestamps, flattened_predictions)
+        data = [{'comment': c, 'timestamp': t, 'predictions': p} for c, t, p in data]
     else:
         data = []
 
     return render_template("user_comments.html", data=data)
+
