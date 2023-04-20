@@ -15,7 +15,7 @@
               <p>
                 Bad inference? Thumb me down:
                 <i class="fa-solid fa-thumbs-down custom-thumb-down ml-2"
-                onclick="handleThumbsDown(event, this, '{{item['comment']|escape}}', '{{item['prediction'][0]}}');">
+                onclick="handleThumbsDown(event, this, '{{item['cleaned_corpus']|escape}}', '{{item['prediction'][0]}}');">
                 </i>
               </p>
             </div>
@@ -38,7 +38,7 @@
               <p>
                 Bad inference? Thumb me down:
                 <i class="fa-solid fa-thumbs-down custom-thumb-down ml-2"
-                onclick="handleThumbsDown(event, this, '{{item['comment']|escape}}', '{{item['prediction'][0]}}');">
+                onclick="handleThumbsDown(event, this, '{{item['cleaned_corpus']|escape}}', '{{item['prediction'][0]}}');">
                 </i>
               </p>
             </div>
