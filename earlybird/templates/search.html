@@ -31,7 +31,7 @@
             <div class="d-flex flex-column w-100">
               <div style="text-align:left">
                 <a href="{{ url_for('main.comments', permalink=item['permalink'][1:]) }}">{{ item['title'] }}</a>
-                {{ item['prediction'] }} <i class="fas fa-grin"></i>
+                {{ item['prediction'] }} <i class="fas fa-frown"></i>
                 <p>
                   Bad inference? Thumb me down:<i class="fa-solid fa-thumbs-down custom-thumb-down ml-2"
                     onclick="handleThumbsDown(event, this, '{{item['cleaned_title']|escape}}', '{{item['prediction'][0]}}');">
