@@ -15,21 +15,21 @@ Our MVP is an app that allows users to:
 
 For our app home page:
 
-1. An eye-catching landing page with a brief introduction to sentiment analysis.**
+1. An eye-catching landing page with a brief introduction to sentiment analysis
 
-2. Longitudinal analysis of an user's sentiment toward a topic that appear frequently within a corpus consisting of his or her posts.
+2. Longitudinal analysis of an user's sentiment toward a topic that appear frequently within a corpus consisting of his or her posts
 
-3. Cache data for efficient display of data**
+3. Cache data for efficient display of data
 
-4. Implement mechanisms for users to download query results [google this]
+4. Implement mechanisms for users to download query result
 
-5. Implement mechanism that allows users to label tweets for further ML training [thumb up / down btn]
+5. Implement mechanism that allows users to label tweets for further ML training
 
-6. A list of "trending topics" or "previous queries" to be displayed on the search page [query db for entries from last 24 hours]
+6. A list of "trending topics" or "previous queries" to be displayed on the search page
 
-7. A profiles page to store user preferences and allow for account updates [add toggle button for simple/detailed view]
+7. A profiles page to store user preferences and allow for account updates
 
-8. Add user interactivity/comments [stretch goal]
+8. Add user interactivity/comments
 
 ## Low-priority features
 
