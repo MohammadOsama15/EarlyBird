@@ -6,23 +6,16 @@ from flask import render_template
 from flask import redirect
 from flask import url_for
 from flask import request
+from flask import Response, make_response
 from . import cache
 from .api import get_posts, get_comments, get_user_comments, clean_title
 from .inference import model, tokenize_sequence
-from .db_functions import get_timestamp
-from .db_functions import store_timestamp
-from .db_functions import delete_timestamp
-from .db_functions import get_titles
-from .db_functions import store_titles
-from .db_functions import delete_titles
-from .db_functions import get_profile
-from .db_functions import store_labeled_data
-from .db_functions import update_password
-from .db_functions import update_profile
-from .models import Timestamp
+from .db_functions import *
+from .models import Timestamp, Comment
 from datetime import timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
+import json
 import logging
 import os
 import pandas as pd
@@ -41,7 +34,6 @@ logger.addHandler(file_handler)
 def index():
     """
     The index route, which redirects to the search route if the user is authenticated.
-
     Returns:
     The rendered index.html template or a redirect to the search route.
     """
@@ -69,7 +61,6 @@ def search_history():
 def profile():
     """
     The profile route, which requires user logged in.
-
     Returns:
     The rendered profile.html template with the user's first name.
     """
@@ -105,7 +96,6 @@ def profile():
 def search():
     """
     The search route, which requires user to be logged in.
-
     Returns:
     The rendered search.html template with the search results.
     """
@@ -145,7 +135,6 @@ def search():
 def information():
     """
     The information route.
-
     Returns:
     The rendered information.html template.
     """
@@ -157,15 +146,18 @@ def information():
 def comments(permalink: str):
     """
     The comments route, which requires user logged in.
-
     Parameters:
     permalink (str): The permalink of the post.
-
     Returns:
     The rendered comments.html template with the comments for the post.
     """
-    data = infer_comments(permalink)
-    return render_template("comments.html", data=data)
+    res = infer_comments(permalink)
+    data=None
+    if res:
+        data, df_json = res
+        delete_comments(query=permalink)
+        store_comments(permalink, df_json)
+    return render_template("comments.html", data=data, query=permalink)
 
 @main.route('/store-labeled-data', methods=['POST'])
 @login_required
@@ -174,16 +166,24 @@ def add_training_data():
     store_labeled_data(comment['corpus'], comment['prediction'])
     return jsonify({'message': 'Data stored successfully.'})
 
+@main.route('/download-inference', methods=['POST'])
+@login_required
+def download_inference():
+    data = request.json
+    query = data['query']
+    json_string = retrieve_comments(query)
+    response = make_response(json_string)
+    response.headers['Content-Type'] = 'application/json'
+    response.headers['Content-Disposition'] = 'attachment; filename=inference.json'
+    return response
 
 @cache.memoize(timeout=3600)
 def submit_query(query: str, cap: int):
     """
     Submits a query to the Reddit API, tokenizes the results, and makes predictions using a model.
-
     Parameters:
     query (str): The query to search for in the Reddit API.
     cap (int): The number of results to query.
-
     Returns:
     list: A list of dictionaries containing the title, prediction, and permalink for each result, or None if there is an error.
     """
@@ -212,11 +212,9 @@ def submit_query(query: str, cap: int):
 def infer_comments(permalink: str):
     """
     Submits a query to the Reddit API, tokenizes the results, and makes predictions using a model.
-
     Parameters:
     fk (int): Title.id
     permalink: permalink of the title
-
     Returns:
     list: A list of dictionaries containing the comments and the associated predictions.
     """
@@ -230,7 +228,10 @@ def infer_comments(permalink: str):
             predictions = model.predict(tokenized_sequence)
             data = [{'comment': c, 'prediction': p, 'cleaned_corpus': cleaned}
                     for c, p, cleaned in zip(comments, predictions, cleaned)]
-            return data
+            flattened_predictions = [val for sublist in predictions for val in sublist]
+            df = pd.DataFrame({'comment': comments, 'prediction': flattened_predictions})
+            df_json = df.to_json(orient='records')
+            return data, df_json
     except Exception as e:
         logger.error(
             f"Could not fetch comments: {str(e)}")
@@ -241,7 +242,6 @@ def infer_comments(permalink: str):
 def user_comments():
     """
     The user_comments route, which requires user to be logged in.
-
     Returns:
     The rendered user_comments.html template with the user's comments.
     """
@@ -251,8 +251,12 @@ def user_comments():
         tokenized_sequence = tokenize_sequence(comments)
         predictions = model.predict(tokenized_sequence)
         flattened_predictions = [val for sublist in predictions for val in sublist]
-        df = pd.DataFrame({'timestamp': comment_timestamps, 'prediction': flattened_predictions})
-        print(df.head())
+
+
+        df = pd.DataFrame({'comment': comments, 'timestamp': comment_timestamps, 'prediction': flattened_predictions})
+        df_json = df.to_json(orient='records')
+        delete_comments(query=query)
+        store_comments(query, df_json)
 
         # Scatter plot
         scatter_fig = px.scatter(df, x='timestamp', y='prediction', title='Sentiment Heat Map')
@@ -272,9 +276,31 @@ def user_comments():
                          title='Sentiment Distribution')
         pie_fig.write_html(os.path.dirname(__file__)+"/static/pie_chart.html", include_plotlyjs='cdn', full_html=False)
 
+        # Scatter plot
+        scatter_fig = px.scatter(df, x='timestamp', y='prediction', title='Sentiment Heat Map')
+        scatter_fig.write_html(os.path.dirname(__file__)+"/static/scatter_plot.html", include_plotlyjs='cdn', full_html=False)
+
+        # Line graph
+        line_fig = px.line(df, x='timestamp', y='prediction', title='Sentiment Over Time')
+        line_fig.write_html(os.path.dirname(__file__)+"/static/line_plot.html", include_plotlyjs='cdn', full_html=False)
+
+        # Count positive and negative sentiments
+        positive_count = sum(1 for p in flattened_predictions if p >= 0.5)
+        negative_count = sum(1 for p in flattened_predictions if p < 0.5)
+
+        # Pie chart
+        pie_fig = px.pie(names=['Positive', 'Negative'],
+                         values=[positive_count, negative_count],
+                         title='Sentiment Distribution')
+        pie_fig.write_html(os.path.dirname(__file__)+"/static/pie_chart.html", include_plotlyjs='cdn', full_html=False)
+
+
+
         data = zip(comments, comment_timestamps, flattened_predictions)
         data = [{'comment': c, 'timestamp': t, 'predictions': p} for c, t, p in data]
     else:
         data = []
 
-    return render_template("user_comments.html", data=data)
+
+
+    return render_template("user_comments.html", data=data, query=query)

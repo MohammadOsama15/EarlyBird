@@ -141,16 +141,31 @@ def delete_titles(fk: int):
     return
 
 
-def get_comments(fk: int):
-    pass
+def retrieve_comments(query: str):
+    res = Comment.query.filter_by(search_term=query)
+    if res:
+        return res.first().dataframe
+    return
 
 
-def store_comments(fk: str, predictions: zip):
-    pass
+def store_comments(query: str, df: json):
+    try:
+        stmt = Comment(search_term=query, dataframe=df)
+        db.session.add(stmt)
+        db.session.commit()
+        db.session.close()
+    except Exception as e:
+        logger.error(f"Failed to store dataframe for {query}: {e}")
+    return
 
 
-def delete_comments(fk: str):
-    pass
+def delete_comments(query: str):
+    res = Comment.query.filter_by(search_term=query)
+    if res:
+        for row in res:
+            db.session.delete(row)
+        db.session.commit()
+        db.session.close()
 
 
 def get_profile(user_id: int):

@@ -33,14 +33,12 @@ class Title(db.Model):
     permalink = db.Column(db.Text())
     cleaned_title = db.Column(db.Text())
     timestamp_id = db.Column(db.Integer, db.ForeignKey('timestamp.id'))
-    comments = db.relationship('Comment', backref='title', lazy=True)
 
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    comment = db.Column(db.Text())
-    prediction = db.Column(db.Float)
-    title_id = db.Column(db.Integer, db.ForeignKey('title.id'))
+    search_term = db.Column(db.Text())
+    dataframe = db.Column(db.Text())
 
 class TrainingData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
