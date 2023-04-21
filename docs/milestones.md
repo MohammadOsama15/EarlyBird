@@ -34,5 +34,5 @@ For our app home page:
 ## Low-priority features
 
 If we are behind schedule, we will de-prioritize the following:
-desired feature #8 & desired feature 7
+desired feature #8 & desired feature #7
 
