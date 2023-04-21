@@ -6,12 +6,12 @@ from flask import render_template
 from flask import redirect
 from flask import url_for
 from flask import request
-from flask import Response, make_response
+from flask import make_response
 from . import cache
 from .api import get_posts, get_comments, get_user_comments, clean_title
 from .inference import model, tokenize_sequence
 from .db_functions import *
-from .models import Timestamp, Comment
+from .models import Timestamp
 from datetime import timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
@@ -247,60 +247,58 @@ def user_comments():
     """
     query = request.args.get("searchTerm")
     if query:
-        comments, comment_timestamps = get_user_comments(query, cap=200)
-        tokenized_sequence = tokenize_sequence(comments)
-        predictions = model.predict(tokenized_sequence)
-        flattened_predictions = [val for sublist in predictions for val in sublist]
+        
+        res = get_user_comments(query, cap=200)
+        if res is not None:
+            comments, comment_timestamps = res
+            tokenized_sequence = tokenize_sequence(comments)
+            predictions = model.predict(tokenized_sequence)
+            flattened_predictions = [val for sublist in predictions for val in sublist]
+            df = pd.DataFrame({'comment': comments, 'timestamp': comment_timestamps, 'prediction': flattened_predictions})
+            df_json = df.to_json(orient='records')
+            delete_comments(query=query)
+            store_comments(query, df_json)
 
+            # Scatter plot
+            scatter_fig = px.scatter(df, x='timestamp', y='prediction', title='Sentiment Heat Map')
+            scatter_fig.write_html(os.path.dirname(__file__)+"/static/scatter_plot.html", include_plotlyjs='cdn', full_html=False)
 
-        df = pd.DataFrame({'comment': comments, 'timestamp': comment_timestamps, 'prediction': flattened_predictions})
-        df_json = df.to_json(orient='records')
-        delete_comments(query=query)
-        store_comments(query, df_json)
+            # Line graph
+            line_fig = px.line(df, x='timestamp', y='prediction', title='Sentiment Over Time')
+            line_fig.write_html(os.path.dirname(__file__)+"/static/line_plot.html", include_plotlyjs='cdn', full_html=False)
 
-        # Scatter plot
-        scatter_fig = px.scatter(df, x='timestamp', y='prediction', title='Sentiment Heat Map')
-        scatter_fig.write_html(os.path.dirname(__file__)+"/static/scatter_plot.html", include_plotlyjs='cdn', full_html=False)
+            # Count positive and negative sentiments
+            positive_count = sum(1 for p in flattened_predictions if p >= 0.5)
+            negative_count = sum(1 for p in flattened_predictions if p < 0.5)
 
-        # Line graph
-        line_fig = px.line(df, x='timestamp', y='prediction', title='Sentiment Over Time')
-        line_fig.write_html(os.path.dirname(__file__)+"/static/line_plot.html", include_plotlyjs='cdn', full_html=False)
+            # Pie chart
+            pie_fig = px.pie(names=['Positive', 'Negative'],
+                            values=[positive_count, negative_count],
+                            title='Sentiment Distribution')
+            pie_fig.write_html(os.path.dirname(__file__)+"/static/pie_chart.html", include_plotlyjs='cdn', full_html=False)
 
-        # Count positive and negative sentiments
-        positive_count = sum(1 for p in flattened_predictions if p >= 0.5)
-        negative_count = sum(1 for p in flattened_predictions if p < 0.5)
+            # Scatter plot
+            scatter_fig = px.scatter(df, x='timestamp', y='prediction', title='Sentiment Heat Map')
+            scatter_fig.write_html(os.path.dirname(__file__)+"/static/scatter_plot.html", include_plotlyjs='cdn', full_html=False)
 
-        # Pie chart
-        pie_fig = px.pie(names=['Positive', 'Negative'],
-                         values=[positive_count, negative_count],
-                         title='Sentiment Distribution')
-        pie_fig.write_html(os.path.dirname(__file__)+"/static/pie_chart.html", include_plotlyjs='cdn', full_html=False)
+            # Line graph
+            line_fig = px.line(df, x='timestamp', y='prediction', title='Sentiment Over Time')
+            line_fig.write_html(os.path.dirname(__file__)+"/static/line_plot.html", include_plotlyjs='cdn', full_html=False)
 
-        # Scatter plot
-        scatter_fig = px.scatter(df, x='timestamp', y='prediction', title='Sentiment Heat Map')
-        scatter_fig.write_html(os.path.dirname(__file__)+"/static/scatter_plot.html", include_plotlyjs='cdn', full_html=False)
+            # Count positive and negative sentiments
+            positive_count = sum(1 for p in flattened_predictions if p >= 0.5)
+            negative_count = sum(1 for p in flattened_predictions if p < 0.5)
 
-        # Line graph
-        line_fig = px.line(df, x='timestamp', y='prediction', title='Sentiment Over Time')
-        line_fig.write_html(os.path.dirname(__file__)+"/static/line_plot.html", include_plotlyjs='cdn', full_html=False)
-
-        # Count positive and negative sentiments
-        positive_count = sum(1 for p in flattened_predictions if p >= 0.5)
-        negative_count = sum(1 for p in flattened_predictions if p < 0.5)
-
-        # Pie chart
-        pie_fig = px.pie(names=['Positive', 'Negative'],
-                         values=[positive_count, negative_count],
-                         title='Sentiment Distribution')
-        pie_fig.write_html(os.path.dirname(__file__)+"/static/pie_chart.html", include_plotlyjs='cdn', full_html=False)
-
-
-
-        data = zip(comments, comment_timestamps, flattened_predictions)
-        data = [{'comment': c, 'timestamp': t, 'predictions': p} for c, t, p in data]
-    else:
-        data = []
+            # Pie chart
+            pie_fig = px.pie(names=['Positive', 'Negative'],
+                            values=[positive_count, negative_count],
+                            title='Sentiment Distribution')
+            pie_fig.write_html(os.path.dirname(__file__)+"/static/pie_chart.html", include_plotlyjs='cdn', full_html=False)
 
 
 
+            data = zip(comments, comment_timestamps, flattened_predictions)
+            data = [{'comment': c, 'timestamp': t, 'predictions': p} for c, t, p in data]
+        else:
+            data = []
     return render_template("user_comments.html", data=data, query=query)

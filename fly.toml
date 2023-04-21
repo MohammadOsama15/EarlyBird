@@ -1,6 +1,6 @@
 # fly.toml file generated for earlybird on 2023-04-06T07:21:05-04:00
 
-app = "reddit-sentiment-analyzer"
+app = "earlybird"
 kill_signal = "SIGINT"
 kill_timeout = 5
 primary_region = "bos"

@@ -1,20 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
+{% if data %}
 <div class="container">
   <div class="form-group col-sm-12 col-md-10 col-lg-8 mx-auto mb-3">
     <div id="chartCarousel" class="carousel slide" data-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
           <h3>Sentiment Heat Map</h3>
-          <iframe src="{{ url_for('static', filename='scatter_plot.html') }}" frameborder="0" width="100%" height="500px"></iframe>
+          <iframe src="{{ url_for('static', filename='scatter_plot.html') }}" frameborder="0" width="100%"
+            height="500px"></iframe>
         </div>
         <div class="carousel-item">
           <h3>Sentiment Over Time</h3>
-          <iframe src="{{ url_for('static', filename='line_plot.html') }}" frameborder="0" width="100%" height="500px"></iframe>
+          <iframe src="{{ url_for('static', filename='line_plot.html') }}" frameborder="0" width="100%"
+            height="500px"></iframe>
         </div>
         <div class="carousel-item">
           <h3>Sentiment Distribution</h3>
-          <iframe src="{{ url_for('static', filename='pie_chart.html') }}" frameborder="0" width="100%" height="500px"></iframe>
+          <iframe src="{{ url_for('static', filename='pie_chart.html') }}" frameborder="0" width="100%"
+            height="500px"></iframe>
         </div>
       </div>
       <a class="carousel-control-prev" href="#chartCarousel" role="button" data-slide="prev">
@@ -28,69 +32,69 @@
     </div>
   </div>
 </div>
-    <h1 class="text-center">User Comments</h1>
-    {% if data %}
-    <hr>
-    <div class="row">
-      <div class="col">
-        <div class="card">
-          <div class="card-body">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Comment</th>
-                  <th scope="col">Timestamp</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for item in data %}
-                {% if "![gif]" not in item.comment %}
-                <tr>
-                  <td>{{ item.comment }}</td>
-                  <td>{{ item.timestamp }}</td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
+<h1 class="text-center">User Comments</h1>
+<hr>
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Comment</th>
+              <th scope="col">Timestamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in data %}
+            {% if "![gif]" not in item.comment %}
+            <tr>
+              <td>{{ item.comment }}</td>
+              <td>{{ item.timestamp }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-  <div class="container text-center mt-5">
-    <button class="btn btn-primary" type="button" onclick="download(event, this, '{{query}}');">Download</button>
-  </div>  
-  {% else %}
-  <p> No results found, please try another Reddit username. </p>
-  {% endif %}
-  <style>
-    .card {
-      background-color: white;
-      border-radius: 5px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-  </style>
-  <script>
-    function downloadFile(data, filename, type) {
-      const file = new Blob([data], {type: type});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(file);
-      a.download = filename;
-      a.click();
-    }
-    
-    function download(event, element, query) {
-      const payload = {
-        'query': query
-      };
-      fetch('/download-inference', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      })
+</div>
+</div>
+<div class="container text-center mt-4 mb-4">
+  <br>
+  <button class="btn btn-primary" type="button" onclick="download(event, this, '{{query}}');">Download</button>
+</div>
+{% else %}
+<p> No comments exist for this user. </p>
+{% endif %}
+<style>
+  .card {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+</style>
+<script>
+  function downloadFile(data, filename, type) {
+    const file = new Blob([data], { type: type });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(file);
+    a.download = filename;
+    a.click();
+  }
+
+  function download(event, element, query) {
+    const payload = {
+      'query': query
+    };
+    fetch('/download-inference', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
       .then(response => {
         if (response.ok) {
           response.text().then(data => {
@@ -103,6 +107,6 @@
       .catch(error => {
         console.error('Error downloading file:', error);
       });
-    }
-  </script>
+  }
+</script>
 {% endblock %}
