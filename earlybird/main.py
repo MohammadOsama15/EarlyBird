@@ -6,23 +6,16 @@ from flask import render_template
 from flask import redirect
 from flask import url_for
 from flask import request
+from flask import Response, make_response
 from . import cache
 from .api import get_posts, get_comments, get_user_comments, clean_title
 from .inference import model, tokenize_sequence
-from .db_functions import get_timestamp
-from .db_functions import store_timestamp
-from .db_functions import delete_timestamp
-from .db_functions import get_titles
-from .db_functions import store_titles
-from .db_functions import delete_titles
-from .db_functions import get_profile
-from .db_functions import store_labeled_data
-from .db_functions import update_password
-from .db_functions import update_profile
-from .models import Timestamp
+from .db_functions import *
+from .models import Timestamp, Comment
 from datetime import timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
+import json
 import logging
 import os
 import pandas as pd
@@ -164,8 +157,11 @@ def comments(permalink: str):
     Returns:
     The rendered comments.html template with the comments for the post.
     """
-    data = infer_comments(permalink)
-    return render_template("comments.html", data=data)
+    data, df_json = infer_comments(permalink)
+    if data:
+        delete_comments(query=permalink)
+        store_comments(permalink, df_json)
+    return render_template("comments.html", data=data, query=permalink)
 
 @main.route('/store-labeled-data', methods=['POST'])
 @login_required
@@ -174,6 +170,16 @@ def add_training_data():
     store_labeled_data(comment['corpus'], comment['prediction'])
     return jsonify({'message': 'Data stored successfully.'})
 
+@main.route('/download-inference', methods=['POST'])
+@login_required
+def download_inference():
+    data = request.json
+    query = data['query']
+    json_string = retrieve_comments(query)
+    response = make_response(json_string)
+    response.headers['Content-Type'] = 'application/json'
+    response.headers['Content-Disposition'] = 'attachment; filename=inference.json'
+    return response
 
 @cache.memoize(timeout=3600)
 def submit_query(query: str, cap: int):
@@ -230,7 +236,10 @@ def infer_comments(permalink: str):
             predictions = model.predict(tokenized_sequence)
             data = [{'comment': c, 'prediction': p, 'cleaned_corpus': cleaned}
                     for c, p, cleaned in zip(comments, predictions, cleaned)]
-            return data
+            flattened_predictions = [val for sublist in predictions for val in sublist]
+            df = pd.DataFrame({'comment': comments, 'prediction': flattened_predictions})
+            df_json = df.to_json(orient='records')
+            return data, df_json
     except Exception as e:
         logger.error(
             f"Could not fetch comments: {str(e)}")
@@ -251,8 +260,10 @@ def user_comments():
         tokenized_sequence = tokenize_sequence(comments)
         predictions = model.predict(tokenized_sequence)
         flattened_predictions = [val for sublist in predictions for val in sublist]
-        df = pd.DataFrame({'timestamp': comment_timestamps, 'prediction': flattened_predictions})
-        print(df.head())
+        df = pd.DataFrame({'comment': comments, 'timestamp': comment_timestamps, 'prediction': flattened_predictions})
+        df_json = df.to_json(orient='records')
+        delete_comments(query=query)
+        store_comments(query, df_json)
        
         # this plots a scatter plot
    
@@ -274,5 +285,5 @@ def user_comments():
     else:
         data = []
 
-    return render_template("user_comments.html", data=data)
+    return render_template("user_comments.html", data=data, query=query)
 

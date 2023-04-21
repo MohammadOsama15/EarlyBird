@@ -37,7 +37,7 @@
     </div>
   </div>
   <div class="container text-center mt-5">
-    <button class="btn btn-primary" type="button">Download</button>
+    <button class="btn btn-primary" type="button" onclick="download(event, this, '{{query}}');">Download</button>
   </div>  
   {% else %}
   <p> No results found, please try another Reddit username. </p>
@@ -49,4 +49,38 @@
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
   </style>
+  <script>
+    function downloadFile(data, filename, type) {
+      const file = new Blob([data], {type: type});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(file);
+      a.download = filename;
+      a.click();
+    }
+    
+    function download(event, element, query) {
+      const payload = {
+        'query': query
+      };
+      fetch('/download-inference', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(response => {
+        if (response.ok) {
+          response.text().then(data => {
+            downloadFile(data, 'inference.json', 'application/json');
+          });
+        } else {
+          console.error('Error downloading file:', response.status);
+        }
+      })
+      .catch(error => {
+        console.error('Error downloading file:', error);
+      });
+    }
+  </script>
 {% endblock %}
