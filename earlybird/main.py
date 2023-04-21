@@ -253,26 +253,28 @@ def user_comments():
         flattened_predictions = [val for sublist in predictions for val in sublist]
         df = pd.DataFrame({'timestamp': comment_timestamps, 'prediction': flattened_predictions})
         print(df.head())
-       
-        # this plots a scatter plot
-   
-        fig = px.scatter(df, x='timestamp', y='prediction', title='sentiment heat map')
-        
-        # to plot pie chart, just count up the number of positive, negative, and neutral comments
-        
-        # this plots a line graph
-        fig = px.line(df, x='timestamp', y='prediction', title='Sentiment over time')
 
-        
-        # this line saves the graph to html file, under templates. You would import this file into the html template
-        # for example <div id="graph"></div> and then in the javascript section, you would embed the html file and display it inside div
-        # to save multiple graphs, change "fig" to something unique for each graph and use "newname.write_html"
-        fig.write_html(os.path.dirname(__file__)+"/templates/graph.html", include_plotlyjs='cdn', full_html=False)
-        
+        # Scatter plot
+        scatter_fig = px.scatter(df, x='timestamp', y='prediction', title='Sentiment Heat Map')
+        scatter_fig.write_html(os.path.dirname(__file__)+"/static/scatter_plot.html", include_plotlyjs='cdn', full_html=False)
+
+        # Line graph
+        line_fig = px.line(df, x='timestamp', y='prediction', title='Sentiment Over Time')
+        line_fig.write_html(os.path.dirname(__file__)+"/static/line_plot.html", include_plotlyjs='cdn', full_html=False)
+
+        # Count positive and negative sentiments
+        positive_count = sum(1 for p in flattened_predictions if p >= 0.5)
+        negative_count = sum(1 for p in flattened_predictions if p < 0.5)
+
+        # Pie chart
+        pie_fig = px.pie(names=['Positive', 'Negative'],
+                         values=[positive_count, negative_count],
+                         title='Sentiment Distribution')
+        pie_fig.write_html(os.path.dirname(__file__)+"/static/pie_chart.html", include_plotlyjs='cdn', full_html=False)
+
         data = zip(comments, comment_timestamps, flattened_predictions)
         data = [{'comment': c, 'timestamp': t, 'predictions': p} for c, t, p in data]
     else:
         data = []
 
     return render_template("user_comments.html", data=data)
-
