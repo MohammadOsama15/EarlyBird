@@ -13,86 +13,88 @@
       </div>
     </div>
   </div>
-  {% if queried %}
-  {% if query %}
-  <div class="user-comments-link">
-    <a href="{{ user_comments_url }}">Explore the sentiment and history of {{ query }}'s comments</a>
-  </div>
-  {% endif %}
-  {% endif %}
-  {% if data %}
-  <div class="container col-lg-12">
-    <div class="row">
-      <div class="col-md-6">
-        <h2 class="text-center">Negative</h2>
-        <ol class="list-group">
-          {% for item in data %}
-          {% if item['prediction'][0] < 0.5 %} <li class="list-group-item list-group-item-danger">
-            <div class="d-flex flex-column w-100">
-              <div style="text-align:left">
-                <a href="{{ url_for('main.comments', permalink=item['permalink'][1:]) }}">{{ item['title'] }}</a>
-                {{ item['prediction'] }} <i class="fas fa-frown"></i>
-                <p>
-                  Bad inference? Thumb me down:<i class="fa-solid fa-thumbs-down custom-thumb-down ml-2"
-                    onclick="handleThumbsDown(event, this, '{{item['cleaned_title']|escape}}', '{{item['prediction'][0]}}');">
-                  </i>
-                </p>
-              </div>
+</form>
+{% if data %}
+<div class="user-comments-link">
+  <a href="{{ user_comments_url }}">Analyze {{ query }}'s comment history</a>
+</div>
+<div class="container col-lg-12">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="text-center">Negative</h2>
+      <ol class="list-group">
+        {% for item in data %}
+        {% if item['prediction'][0] < 0.5 %} <li class="list-group-item list-group-item-danger">
+          <div class="d-flex flex-column w-100">
+            <div style="text-align:left">
+              <a href="{{ url_for('main.comments', permalink=item['permalink'][1:]) }}">{{ item['title'] }}</a>
+              {{ item['prediction'] }} <i class="fas fa-frown"></i>
+              <p>
+                Bad inference? Thumb me down:<i class="fa-solid fa-thumbs-down custom-thumb-down ml-2"
+                  onclick="handleThumbsDown(event, this, '{{item['cleaned_title']|escape}}', '{{item['prediction'][0]}}');">
+                </i>
+              </p>
             </div>
-            </li>
-            {% endif %}
-            {% endfor %}
-        </ol>
-      </div>
-      <div class="col-md-6">
-        <h2 class="text-center">Positive</h2>
-        <ol class="list-group">
-          {% for item in data %}
-          {% if item['prediction'][0] >= 0.5 %}
-          <li class="list-group-item list-group-item-success">
-            <div class="d-flex flex-column w-100">
-              <div style="text-align:left">
-                <a href="{{ url_for('main.comments', permalink=item['permalink'][1:]) }}">{{ item['title'] }}</a>
-                {{ item['prediction'] }} <i class="fas fa-grin"></i>
-                <p>
-                  Bad inference? Thumb me down:<i class="fa-solid fa-thumbs-down custom-thumb-down ml-2"
-                    onclick="handleThumbsDown(event, this, '{{item['cleaned_title']|escape}}', '{{item['prediction'][0]}}');">
-                  </i>
-                </p>
-              </div>
-            </div>
+          </div>
           </li>
           {% endif %}
           {% endfor %}
-        </ol>
-      </div>
+      </ol>
+    </div>
+    <div class="col-md-6">
+      <h2 class="text-center">Positive</h2>
+      <ol class="list-group">
+        {% for item in data %}
+        {% if item['prediction'][0] >= 0.5 %}
+        <li class="list-group-item list-group-item-success">
+          <div class="d-flex flex-column w-100">
+            <div style="text-align:left">
+              <a href="{{ url_for('main.comments', permalink=item['permalink'][1:]) }}">{{ item['title'] }}</a>
+              {{ item['prediction'] }} <i class="fas fa-grin"></i>
+              <p>
+                Bad inference? Thumb me down:<i class="fa-solid fa-thumbs-down custom-thumb-down ml-2"
+                  onclick="handleThumbsDown(event, this, '{{item['cleaned_title']|escape}}', '{{item['prediction'][0]}}');">
+                </i>
+              </p>
+            </div>
+          </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ol>
     </div>
   </div>
-  {% elif queried %}
-  <script>
-    document.getElementsByName('searchTerm')[0].placeholder = 'No results found, please try another Reddit username.';
-  </script>
-  {% endif %}
-  <style>
-    .btn {
-      background-color: rgb(80, 80, 80);
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-    #searchbox {
-      background-color: rgb(255, 255, 255);
-    }
-    .fa-solid.fa-thumbs-up,
-    .fa-solid.fa-thumbs-down {
-      cursor: pointer;
-    }
-    .custom-thumb-up {
-      margin-left: 10px;
-    }
-    .custom-thumb-down {
-      margin-left: 10px;
-    }
-    .user-comments-link {
+</div>
+{% elif queried %}
+<script>
+  document.getElementsByName('searchTerm')[0].placeholder = 'No results found, please try another Reddit username.';
+</script>
+{% endif %}
+<style>
+  .btn {
+    background-color: rgb(80, 80, 80);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  #searchbox {
+    background-color: rgb(255, 255, 255);
+  }
+
+  .fa-solid.fa-thumbs-up,
+  .fa-solid.fa-thumbs-down {
+    cursor: pointer;
+  }
+
+  .custom-thumb-up {
+    margin-left: 10px;
+  }
+
+  .custom-thumb-down {
+    margin-left: 10px;
+  }
+
+  .user-comments-link {
     background-color: white;
     padding: 10px;
     margin-bottom: 20px;
@@ -100,28 +102,28 @@
     width: fit-content;
     margin: 20px auto;
   }
-  </style>
-  <script>
-    function handleThumbsDown(event, element, corpus, prediction) {
-      alert("Thank you.\n\nMessage: " + corpus + " \n\nassociated with \n\nPrediction: " + prediction + " \n\nhas been reported as inaccurate.");
-      const data = {
-        corpus: corpus,
-        prediction: prediction
-      };
-      fetch('/store-labeled-data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+</style>
+<script>
+  function handleThumbsDown(event, element, corpus, prediction) {
+    alert("Thank you.\n\nMessage: " + corpus + " \n\nassociated with \n\nPrediction: " + prediction + " \n\nhas been reported as inaccurate.");
+    const data = {
+      corpus: corpus,
+      prediction: prediction
+    };
+    fetch('/store-labeled-data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
       })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    }
-  </script>
-  {% endblock %}
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+</script>
+{% endblock %}

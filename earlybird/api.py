@@ -45,7 +45,7 @@ def get_access_token():
     except (json.decoder.JSONDecodeError, KeyError):
         print("Error decoding JSON response from Reddit API")
         return None
-
+ 
 
 
 def clean_title(title):
@@ -223,7 +223,7 @@ def get_user_comments(query, cap=None):
         time.sleep(1)
 
     if not comments:
-        return None, None
+        return None
     return comments, timestamps
 
 
