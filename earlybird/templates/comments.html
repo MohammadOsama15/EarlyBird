@@ -76,7 +76,7 @@
 </style>
 <script>
   function handleThumbsDown(event, element, corpus, prediction) {
-    alert("Thank you.\n\nMessage: " + corpus + " \n\nassociated with \n\nPrediction: " + prediction + " \n\nhas been reported as inaccurate.");
+    alert("The following content has been reported as inaccurate:\n\nMessage: " + corpus + " \n\nPrediction: " + prediction);
     const data = {
       corpus: corpus,
       prediction: prediction
