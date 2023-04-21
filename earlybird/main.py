@@ -34,7 +34,6 @@ logger.addHandler(file_handler)
 def index():
     """
     The index route, which redirects to the search route if the user is authenticated.
-
     Returns:
     The rendered index.html template or a redirect to the search route.
     """
@@ -62,7 +61,6 @@ def search_history():
 def profile():
     """
     The profile route, which requires user logged in.
-
     Returns:
     The rendered profile.html template with the user's first name.
     """
@@ -98,7 +96,6 @@ def profile():
 def search():
     """
     The search route, which requires user to be logged in.
-
     Returns:
     The rendered search.html template with the search results.
     """
@@ -138,7 +135,6 @@ def search():
 def information():
     """
     The information route.
-
     Returns:
     The rendered information.html template.
     """
@@ -150,15 +146,15 @@ def information():
 def comments(permalink: str):
     """
     The comments route, which requires user logged in.
-
     Parameters:
     permalink (str): The permalink of the post.
-
     Returns:
     The rendered comments.html template with the comments for the post.
     """
-    data, df_json = infer_comments(permalink)
-    if data:
+    res = infer_comments(permalink)
+    data=None
+    if res:
+        data, df_json = res
         delete_comments(query=permalink)
         store_comments(permalink, df_json)
     return render_template("comments.html", data=data, query=permalink)
@@ -185,11 +181,9 @@ def download_inference():
 def submit_query(query: str, cap: int):
     """
     Submits a query to the Reddit API, tokenizes the results, and makes predictions using a model.
-
     Parameters:
     query (str): The query to search for in the Reddit API.
     cap (int): The number of results to query.
-
     Returns:
     list: A list of dictionaries containing the title, prediction, and permalink for each result, or None if there is an error.
     """
@@ -218,11 +212,9 @@ def submit_query(query: str, cap: int):
 def infer_comments(permalink: str):
     """
     Submits a query to the Reddit API, tokenizes the results, and makes predictions using a model.
-
     Parameters:
     fk (int): Title.id
     permalink: permalink of the title
-
     Returns:
     list: A list of dictionaries containing the comments and the associated predictions.
     """
@@ -250,7 +242,6 @@ def infer_comments(permalink: str):
 def user_comments():
     """
     The user_comments route, which requires user to be logged in.
-
     Returns:
     The rendered user_comments.html template with the user's comments.
     """
@@ -260,30 +251,35 @@ def user_comments():
         tokenized_sequence = tokenize_sequence(comments)
         predictions = model.predict(tokenized_sequence)
         flattened_predictions = [val for sublist in predictions for val in sublist]
+
         df = pd.DataFrame({'comment': comments, 'timestamp': comment_timestamps, 'prediction': flattened_predictions})
         df_json = df.to_json(orient='records')
         delete_comments(query=query)
         store_comments(query, df_json)
-       
-        # this plots a scatter plot
-   
-        fig = px.scatter(df, x='timestamp', y='prediction', title='sentiment heat map')
-        
-        # to plot pie chart, just count up the number of positive, negative, and neutral comments
-        
-        # this plots a line graph
-        fig = px.line(df, x='timestamp', y='prediction', title='Sentiment over time')
 
-        
-        # this line saves the graph to html file, under templates. You would import this file into the html template
-        # for example <div id="graph"></div> and then in the javascript section, you would embed the html file and display it inside div
-        # to save multiple graphs, change "fig" to something unique for each graph and use "newname.write_html"
-        fig.write_html(os.path.dirname(__file__)+"/templates/graph.html", include_plotlyjs='cdn', full_html=False)
-        
+        # Scatter plot
+        scatter_fig = px.scatter(df, x='timestamp', y='prediction', title='Sentiment Heat Map')
+        scatter_fig.write_html(os.path.dirname(__file__)+"/static/scatter_plot.html", include_plotlyjs='cdn', full_html=False)
+
+        # Line graph
+        line_fig = px.line(df, x='timestamp', y='prediction', title='Sentiment Over Time')
+        line_fig.write_html(os.path.dirname(__file__)+"/static/line_plot.html", include_plotlyjs='cdn', full_html=False)
+
+        # Count positive and negative sentiments
+        positive_count = sum(1 for p in flattened_predictions if p >= 0.5)
+        negative_count = sum(1 for p in flattened_predictions if p < 0.5)
+
+        # Pie chart
+        pie_fig = px.pie(names=['Positive', 'Negative'],
+                         values=[positive_count, negative_count],
+                         title='Sentiment Distribution')
+        pie_fig.write_html(os.path.dirname(__file__)+"/static/pie_chart.html", include_plotlyjs='cdn', full_html=False)
+
+
         data = zip(comments, comment_timestamps, flattened_predictions)
         data = [{'comment': c, 'timestamp': t, 'predictions': p} for c, t, p in data]
     else:
         data = []
 
-    return render_template("user_comments.html", data=data, query=query)
 
+    return render_template("user_comments.html", data=data, query=query)
