@@ -29,7 +29,7 @@ For our app home page:
 
 7. A profiles page to store user preferences and allow for account updates
 
-8. Add user interactivity/comments
+8. Add user interactivity/comments [we have decided to drop this feature after some careful discussions. While implementing SocketIO does not present a technical block for our group, we currently do not see a justifiable need for chats and comments]
 
 ## Low-priority features
 
