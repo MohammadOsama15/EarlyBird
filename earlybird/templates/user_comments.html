@@ -49,8 +49,8 @@
             {% for item in data %}
             {% if "![gif]" not in item.comment %}
             <tr>
-              <td>{{ item.comment }}</td>
-              <td>{{ item.timestamp }}</td>
+              <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">{{ item.comment }}</td>
+              <td style="word-wrap: break-word;min-width: 80px;max-width: 160px;">{{ item.timestamp }}</td>
             </tr>
             {% endif %}
             {% endfor %}
